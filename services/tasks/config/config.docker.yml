@@ -1,0 +1,52 @@
+apiVersion: "1.0.0"
+
+app:
+  name: "tasks"
+  env: "dev"
+  version: "1.0"
+
+postgres:
+  port: "5436"
+
+#  host: ""
+#  port: ""
+#  hostname: ""
+#  dbname: ""
+#  password: ""
+#  SSLMode: ""
+
+logger:
+  env: "dev" # "prod"
+  level: "info"
+  outputs:
+    - "stdout"
+  error_outputs:
+    - "stderr"
+  encoding: "json"
+  sentry_level: "error"
+  sentry_dsn: ""
+
+metrics:
+  enable: true
+  dsn: "<sentry_dsn_for_service>"
+
+graceful_shutdown:
+  delay: "3s"
+  wait_timeout: "15s"
+  callback_timeout: "5s"
+
+http:
+  host: "0.0.0.0"
+  port: 8082
+  read_timeout: "15s"
+  write_timeout: "15s"
+
+tracer:
+  enable: true
+  exp_target: "host.docker.internal:4317"
+
+payments_client:
+  uri: "http://payments-svc:8088/api/v1"
+
+banker:
+  interval: 10s

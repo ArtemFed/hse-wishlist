@@ -1,0 +1,52 @@
+apiVersion: "1.0.0"
+
+app:
+  name: "tasks"
+  env: "dev"
+  version: "1.0"
+
+postgres:
+  port: "5432"
+
+#  host: ""
+#  port: ""
+#  hostname: ""
+#  dbname: ""
+#  password: ""
+#  SSLMode: ""
+
+logger:
+  env: "dev" # "prod"
+  level: "info"
+  outputs:
+    - "stdout"
+  error_outputs:
+    - "stderr"
+  encoding: "json"
+  sentry_dsn: ""
+  sentry_level: "error"
+
+metrics:
+  enable: false
+  dsn: "<sentry_dsn_for_service>"
+
+graceful_shutdown:
+  delay: "5s"
+  wait_timeout: "5s"
+  callback_timeout: "2s"
+
+http:
+  host: "localhost"
+  port: 8082
+  read_timeout: "1s"
+  write_timeout: "1s"
+
+tracer:
+  enable: false
+  exp_target: "jaeger-all-in-one:4317"
+
+payments_client:
+  uri: "http://localhost:8088/api/v1/payment"
+
+banker:
+  interval: 10s

@@ -1,0 +1,195 @@
+openapi: 3.0.0
+info:
+  title: Discount Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1/tasks
+paths:
+  /discounts/{id}:
+    get:
+      tags:
+        - Discount
+      summary: Get discount by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountGet'
+  /discounts:
+    get:
+      tags:
+        - Discount
+      summary: List discounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscountFilter'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscountGet'
+    post:
+      tags:
+        - Discount
+      summary: Create a discount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscountCreate'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelUUID'
+    put:
+      tags:
+        - Discount
+      summary: Update a discount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscountUpdate'
+      responses:
+        '200':
+          description: Successful operation
+  /discounts/{id}/end:
+    patch:
+      tags:
+        - Discount
+      summary: End a discount
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+components:
+  schemas:
+    DiscountGet:
+      type: object
+      properties:
+        UUID:
+          type: string
+          format: uuid
+        CreatedBy:
+          type: string
+          format: uuid
+        Percent:
+          type: number
+        StartedAt:
+          type: string
+          format: date-time
+        EndedAt:
+          type: string
+          format: date-time
+        Status:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        LastUpdateAt:
+          type: string
+          format: date-time
+      required:
+        - UUID
+        - CreatedBy
+        - Percent
+        - StartedAt
+        - EndedAt
+        - Status
+        - CreatedAt
+        - LastUpdateAt
+    DiscountCreate:
+      type: object
+      properties:
+        CreatedBy:
+          type: string
+          format: uuid
+        Percent:
+          type: number
+        StartedAt:
+          type: string
+          format: date-time
+        EndedAt:
+          type: string
+          format: date-time
+        Status:
+          type: string
+      required:
+        - CreatedBy
+        - Percent
+        - StartedAt
+        - EndedAt
+        - Status
+    DiscountUpdate:
+      type: object
+      properties:
+        UUID:
+          type: string
+          format: uuid
+        CreatedBy:
+          type: string
+          format: uuid
+        Percent:
+          type: number
+        StartedAt:
+          type: string
+          format: date-time
+        EndedAt:
+          type: string
+          format: date-time
+        Status:
+          type: string
+      required:
+        - UUID
+        - CreatedBy
+        - Percent
+        - StartedAt
+        - EndedAt
+        - Status
+    DiscountFilter:
+      type: object
+      properties:
+        UUID:
+          type: string
+          format: uuid
+        CreatedBy:
+          type: string
+          format: uuid
+        Percent:
+          type: number
+        Status:
+          type: string
+    ModelUUID:
+      type: object
+      properties:
+        UUID:
+          type: string
+          format: uuid
+      required:
+        - UUID

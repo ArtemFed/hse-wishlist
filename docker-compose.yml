@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  tasks-svc:
+    image: 'tasks-svc:latest'
+    build:
+      context: './'
+      dockerfile: 'services/tasks/tasks.Dockerfile'
+    ports:
+      - "8082:8082"
+    depends_on:
+      tasks_db:
+        condition: service_healthy
+    environment:
+      - LOGGER_LEVEL=release
+      - DB_PASSWORD=${TASKS_POSTGRES_PASSWORD}
+
+  tasks_db:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=${TASKS_POSTGRES_NAME}
+      - POSTGRES_HOST=${TASKS_POSTGRES_HOST}
+      - POSTGRES_USER=${TASKS_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${TASKS_POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d tasks_db" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
