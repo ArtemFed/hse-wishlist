@@ -1,6 +1,6 @@
 package metrics
 
 type Config struct {
-	MetricsEnable  bool   `mapstructure:"enable"`
-	MetricsAddress string `mapstructure:"address"`
+	Enable  bool   `mapstructure:"enable"`
+	Address string `mapstructure:"address"`
 }

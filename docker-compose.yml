@@ -9,15 +9,19 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      tasks_db:
+      postgres:
         condition: service_healthy
     environment:
       - LOGGER_LEVEL=release
       - DB_PASSWORD=${TASKS_POSTGRES_PASSWORD}
+    networks:
+      - new
+    volumes:
+      - migrations-data:/services/tasks/migrations
 
-  tasks_db:
+  postgres:
     restart: always
-    image: postgres:latest
+    image: 'postgres:latest'
     ports:
       - "5436:5432"
     environment:
@@ -26,7 +30,31 @@ services:
       - POSTGRES_USER=${TASKS_POSTGRES_USER}
       - POSTGRES_PASSWORD=${TASKS_POSTGRES_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d tasks_db" ]
+      test: [ "CMD-SHELL", "su", "postgres", "-c", "pg_isready" ]
       interval: 5s
       timeout: 10s
       retries: 5
+      start_period: 10s
+    networks:
+      - new
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate
+    command: ["-path", "/migrations", "-database",  "postgres://${TASKS_POSTGRES_USER}:${TASKS_POSTGRES_PASSWORD}@${TASKS_POSTGRES_HOST}:${TASKS_POSTGRES_PORT}/${TASKS_POSTGRES_NAME}?sslmode=disable", "up", "3"]
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    networks:
+      - new
+    volumes:
+      - migrations-data:/migrations
+
+networks:
+  new:
+
+volumes:
+  pgdata:
+  migrations-data:

@@ -42,7 +42,7 @@ http:
   write_timeout: "15s"
 
 tracer:
-  enable: true
+  enable: false
   exp_target: "host.docker.internal:4317"
 
 payments_client:

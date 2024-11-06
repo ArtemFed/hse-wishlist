@@ -17,7 +17,7 @@ type Config struct {
 }
 
 func NewDB(cfg *Config) (*sqlx.DB, error) {
-	dbParams := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
+	dbDSN := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
 		cfg.Host,
 		cfg.Port,
 		cfg.User,
@@ -25,8 +25,8 @@ func NewDB(cfg *Config) (*sqlx.DB, error) {
 		cfg.SSL,
 		cfg.Password,
 	)
-	log.Println(dbParams)
-	db, err := sqlx.Open("postgres", dbParams)
+	log.Printf("DB DSN: '%s'\n", dbDSN)
+	db, err := sqlx.Open("postgres", dbDSN)
 	if err != nil {
 		return nil, err
 	}

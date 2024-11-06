@@ -9,7 +9,6 @@ import (
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/log"
 	ginzap "github.com/gin-contrib/zap"
 	requestid "github.com/sumit-tembe/gin-requestid"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"time"
 )
 
@@ -29,11 +28,11 @@ func (a *App) startHTTPServer(ctx context.Context) {
 	// Создаем общий роутинг http сервера
 	router := xhttp.NewRouter()
 
-	tracerMw := http.MiddlewareFunc(otelgin.Middleware(a.cfg.App.Name, otelgin.WithTracerProvider(a.tracerProvider)))
+	//tracerMw := http.MiddlewareFunc(otelgin.Middleware(a.cfg.App.Name, otelgin.WithTracerProvider(a.tracerProvider)))
 	GinZapMw := http.MiddlewareFunc(ginzap.Ginzap(log.Logger, time.RFC3339, true))
 	requestIdMw := http.MiddlewareFunc(requestid.RequestID(nil))
 	middlewares := []http.MiddlewareFunc{
-		tracerMw,
+		//tracerMw,
 		GinZapMw,
 		requestIdMw,
 	}

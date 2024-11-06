@@ -50,30 +50,39 @@ func NewApp(cfg *config.Config) (*App, error) {
 	}
 
 	// Инициализируем трассировку
-	tp, err := xtracer.Init(cfg.Tracer, cfg.App)
-	if err != nil {
-		return nil, err
+	var tp *trace.TracerProvider = nil
+	if cfg.Tracer.Enable {
+		tp, err = xtracer.Init(cfg.Tracer, cfg.App)
+		if err != nil {
+			return nil, err
+		}
+		xshutdown.AddCallback(
+			&xshutdown.Callback{
+				Name: "OpenTelemetryShutdown",
+				FnCtx: func(ctx context.Context) error {
+					if err := tp.Shutdown(context.Background()); err != nil {
+						log.Logger.Error("Error shutting down tracer provider: %v", zap.Error(err))
+						return err
+					}
+					return nil
+				},
+			})
+		log.Logger.Info("Init Tracer – success")
+	} else {
+		log.Logger.Info("Init Tracer – skipped")
 	}
-	xshutdown.AddCallback(
-		&xshutdown.Callback{
-			Name: "OpenTelemetryShutdown",
-			FnCtx: func(ctx context.Context) error {
-				if err := tp.Shutdown(context.Background()); err != nil {
-					log.Logger.Error("Error shutting down tracer provider: %v", zap.Error(err))
-					return err
-				}
-				return nil
-			},
-		})
-	log.Logger.Info("Init Tracer – success")
 
 	// Инициализируем Prometheus
-	metrics.InitOnce(cfg.Metrics, log.Logger, metrics.AppInfo{
-		Name:        cfg.App.Name,
-		Environment: string(cfg.App.Environment),
-		Version:     cfg.App.Version,
-	})
-	log.Logger.Info("Init Metrics – success")
+	if cfg.Metrics.Enable {
+		metrics.InitOnce(cfg.Metrics, log.Logger, metrics.AppInfo{
+			Name:        cfg.App.Name,
+			Environment: string(cfg.App.Environment),
+			Version:     cfg.App.Version,
+		})
+		log.Logger.Info("Init Metrics – success")
+	} else {
+		log.Logger.Info("Init Metrics – skipped")
+	}
 
 	// REPOSITORY ----------------------------------------------------------------------
 

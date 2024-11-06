@@ -1,6 +1,6 @@
 module github.com/ArtemFed/hse-wishlist
 
-go 1.22.8
+go 1.22.7
 
 require (
 	github.com/TheZeroSlave/zapsentry v1.22.1
