@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type Discount struct {
+type Task struct {
 	UUID          uuid.UUID `db:"uuid"`
 	CreatedBy     uuid.UUID `db:"created_by"`
 	Percent       float32   `db:"percent"`
@@ -17,9 +17,9 @@ type Discount struct {
 	LastUpdatedAt time.Time `db:"updated_at"`
 }
 
-func CreateToDiscountPostgres(model *domain.DiscountCreate) *Discount {
+func CreateToTaskPostgres(model *domain.TaskCreate) *Task {
 	id, _ := uuid.NewUUID()
-	return &Discount{
+	return &Task{
 		UUID:      id,
 		CreatedBy: model.CreatedBy,
 		Percent:   model.Percent,
@@ -30,8 +30,8 @@ func CreateToDiscountPostgres(model *domain.DiscountCreate) *Discount {
 	}
 }
 
-func UpdateToDiscountPostgres(model *domain.DiscountUpdate) *Discount {
-	return &Discount{
+func UpdateToTaskPostgres(model *domain.TaskUpdate) *Task {
+	return &Task{
 		UUID:      model.UUID,
 		CreatedBy: model.CreatedBy,
 		Percent:   model.Percent,
@@ -41,8 +41,8 @@ func UpdateToDiscountPostgres(model *domain.DiscountUpdate) *Discount {
 	}
 }
 
-func ToDiscountDomain(model *Discount) *domain.DiscountGet {
-	return &domain.DiscountGet{
+func ToTaskDomain(model *Task) *domain.TaskGet {
+	return &domain.TaskGet{
 		UUID:         model.UUID,
 		CreatedBy:    model.CreatedBy,
 		Percent:      model.Percent,

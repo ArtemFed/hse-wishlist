@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/config"
-	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/discount"
+	task "github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/task"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
 	"strings"
 
@@ -18,16 +18,16 @@ const (
 type MiddlewareFunc func(c *gin.Context)
 
 type Handler struct {
-	cfg             *config.Config
-	discountService adapters.DiscountService
+	cfg         *config.Config
+	taskService adapters.TaskService
 }
 
 func NewHandler(cfg *config.Config,
-	discountService adapters.DiscountService,
+	taskService adapters.TaskService,
 ) Handler {
 	return Handler{
-		cfg:             cfg,
-		discountService: discountService,
+		cfg:         cfg,
+		taskService: taskService,
 	}
 }
 
@@ -36,8 +36,8 @@ func HandleError(c *gin.Context, err error, statusCode int) {
 	c.JSON(statusCode, gin.H{"error": err.Error()})
 }
 
-func ConvertToDiscount(middlewareMainArr []MiddlewareFunc) []discount.MiddlewareFunc {
-	result := make([]discount.MiddlewareFunc, len(middlewareMainArr))
+func ConvertToTask(middlewareMainArr []MiddlewareFunc) []task.MiddlewareFunc {
+	result := make([]task.MiddlewareFunc, len(middlewareMainArr))
 	for i, middlewareMain := range middlewareMainArr {
 		result[i] = func(c *gin.Context) {
 			middlewareMain(c)
@@ -54,11 +54,11 @@ func InitHandler(
 ) {
 	baseUrl := fmt.Sprintf("%s/%s/%s", apiPrefix, getVersion(), httpPrefix)
 
-	discount.RegisterHandlersWithOptions(router,
-		discount.NewDiscountHandler(handler.discountService),
-		discount.GinServerOptions{
+	task.RegisterHandlersWithOptions(router,
+		task.NewTaskHandler(handler.taskService),
+		task.GinServerOptions{
 			BaseURL:      baseUrl,
-			Middlewares:  ConvertToDiscount(middlewares),
+			Middlewares:  ConvertToTask(middlewares),
 			ErrorHandler: HandleError,
 		})
 }

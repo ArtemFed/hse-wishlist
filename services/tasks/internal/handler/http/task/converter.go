@@ -1,11 +1,11 @@
-package discount
+package task
 
 import (
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/domain"
 )
 
-func CreateToDomain(create DiscountCreate) domain.DiscountCreate {
-	return domain.DiscountCreate{
+func CreateToDomain(create TaskCreate) domain.TaskCreate {
+	return domain.TaskCreate{
 		CreatedBy: create.CreatedBy,
 		Percent:   create.Percent,
 		StartedAt: create.StartedAt,
@@ -14,8 +14,8 @@ func CreateToDomain(create DiscountCreate) domain.DiscountCreate {
 	}
 }
 
-func DomainToGet(get domain.DiscountGet) DiscountGet {
-	return DiscountGet{
+func DomainToGet(get domain.TaskGet) TaskGet {
+	return TaskGet{
 		UUID:         get.UUID,
 		CreatedBy:    get.CreatedBy,
 		Percent:      get.Percent,
@@ -27,8 +27,8 @@ func DomainToGet(get domain.DiscountGet) DiscountGet {
 	}
 }
 
-func UpdateToDomain(update DiscountUpdate) domain.DiscountUpdate {
-	return domain.DiscountUpdate{
+func UpdateToDomain(update TaskUpdate) domain.TaskUpdate {
+	return domain.TaskUpdate{
 		UUID:      update.UUID,
 		CreatedBy: update.CreatedBy,
 		Percent:   update.Percent,
@@ -38,11 +38,11 @@ func UpdateToDomain(update DiscountUpdate) domain.DiscountUpdate {
 	}
 }
 
-func FilterToDomain(filter *DiscountFilter) *domain.DiscountFilter {
+func FilterToDomain(filter *TaskFilter) *domain.TaskFilter {
 	if filter == nil {
 		return nil
 	}
-	return &domain.DiscountFilter{
+	return &domain.TaskFilter{
 		UUID:      filter.UUID,
 		CreatedBy: filter.CreatedBy,
 		Percent:   filter.Percent,

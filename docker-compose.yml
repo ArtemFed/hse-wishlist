@@ -2,10 +2,13 @@ version: '3.9'
 
 services:
   tasks-svc:
-    image: 'tasks-svc:latest'
     build:
       context: './'
       dockerfile: 'services/tasks/tasks.Dockerfile'
+      args:
+        ENV_FILE: .env.dist
+    networks:
+      - new
     ports:
       - "8082:8082"
     depends_on:
@@ -14,14 +17,14 @@ services:
     environment:
       - LOGGER_LEVEL=release
       - DB_PASSWORD=${TASKS_POSTGRES_PASSWORD}
-    networks:
-      - new
     volumes:
-      - migrations-data:/services/tasks/migrations
+        - migrations-data:/services/tasks/migrations
 
   postgres:
     restart: always
     image: 'postgres:latest'
+    networks:
+      - new
     ports:
       - "5436:5432"
     environment:
@@ -35,22 +38,28 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-    networks:
-      - new
     volumes:
       - pgdata:/var/lib/postgresql/data
 
   migrate:
     image: migrate/migrate
-    command: ["-path", "/migrations", "-database",  "postgres://${TASKS_POSTGRES_USER}:${TASKS_POSTGRES_PASSWORD}@${TASKS_POSTGRES_HOST}:${TASKS_POSTGRES_PORT}/${TASKS_POSTGRES_NAME}?sslmode=disable", "up", "3"]
+    command: [ "-path",
+               "/services/tasks/migrations",
+               "-database",
+               "postgres://${TASKS_POSTGRES_USER}:${TASKS_POSTGRES_PASSWORD}@${TASKS_POSTGRES_HOST}:${TASKS_POSTGRES_PORT}/${TASKS_POSTGRES_NAME}?sslmode=disable",
+               "up" ]
     links:
       - postgres
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - new
+#    volumes:
+#      - ./services/tasks/migrations/:/services/tasks/migrations
     volumes:
-      - migrations-data:/migrations
+      - migrations-data:/services/tasks/migrations
+
 
 networks:
   new:

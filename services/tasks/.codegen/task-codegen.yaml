@@ -1,15 +1,15 @@
 openapi: 3.0.0
 info:
-  title: Discount Service API
+  title: Task Service API
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
-  /discounts/{id}:
+  /tasks/{id}:
     get:
       tags:
-        - Discount
-      summary: Get discount by ID
+        - Task
+      summary: Get task by ID
       parameters:
         - in: path
           name: id
@@ -23,18 +23,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DiscountGet'
-  /discounts:
+                $ref: '#/components/schemas/TaskGet'
+  /tasks:
     get:
       tags:
-        - Discount
-      summary: List discounts
+        - Task
+      summary: List tasks
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DiscountFilter'
+              $ref: '#/components/schemas/TaskFilter'
       responses:
         '200':
           description: Successful operation
@@ -43,16 +43,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DiscountGet'
+                  $ref: '#/components/schemas/TaskGet'
     post:
       tags:
-        - Discount
-      summary: Create a discount
+        - Task
+      summary: Create a task
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DiscountCreate'
+              $ref: '#/components/schemas/TaskCreate'
       responses:
         '200':
           description: Successful operation
@@ -62,22 +62,22 @@ paths:
                 $ref: '#/components/schemas/ModelUUID'
     put:
       tags:
-        - Discount
-      summary: Update a discount
+        - Task
+      summary: Update a task
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DiscountUpdate'
+              $ref: '#/components/schemas/TaskUpdate'
       responses:
         '200':
           description: Successful operation
-  /discounts/{id}/end:
+  /tasks/{id}/end:
     patch:
       tags:
-        - Discount
-      summary: End a discount
+        - Task
+      summary: End a task
       parameters:
         - in: path
           name: id
@@ -90,7 +90,7 @@ paths:
           description: Successful operation
 components:
   schemas:
-    DiscountGet:
+    TaskGet:
       type: object
       properties:
         UUID:
@@ -124,7 +124,7 @@ components:
         - Status
         - CreatedAt
         - LastUpdateAt
-    DiscountCreate:
+    TaskCreate:
       type: object
       properties:
         CreatedBy:
@@ -146,7 +146,7 @@ components:
         - StartedAt
         - EndedAt
         - Status
-    DiscountUpdate:
+    TaskUpdate:
       type: object
       properties:
         UUID:
@@ -172,7 +172,7 @@ components:
         - StartedAt
         - EndedAt
         - Status
-    DiscountFilter:
+    TaskFilter:
       type: object
       properties:
         UUID:

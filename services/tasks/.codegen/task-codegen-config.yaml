@@ -1,0 +1,10 @@
+# task-codegen-config.yaml for task api + server
+
+output: internal/handler/http/task/task_gen.go
+package: task
+generate:
+  - types
+  - gin-server
+
+# To RUN from root:
+# oapi-codegen --config .codegen/task-codegen-config.yaml .codegen/task-codegen.yaml

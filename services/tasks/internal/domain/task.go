@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type DiscountGet struct {
+type TaskGet struct {
 	UUID         uuid.UUID
 	CreatedBy    uuid.UUID
 	Percent      float32
@@ -16,7 +16,7 @@ type DiscountGet struct {
 	LastUpdateAt time.Time
 }
 
-type DiscountCreate struct {
+type TaskCreate struct {
 	CreatedBy uuid.UUID
 	Percent   float32
 	StartedAt time.Time
@@ -24,7 +24,7 @@ type DiscountCreate struct {
 	Status    string
 }
 
-type DiscountUpdate struct {
+type TaskUpdate struct {
 	UUID      uuid.UUID
 	CreatedBy uuid.UUID
 	Percent   float32
@@ -33,7 +33,7 @@ type DiscountUpdate struct {
 	Status    string
 }
 
-type DiscountFilter struct {
+type TaskFilter struct {
 	UUID      *uuid.UUID
 	CreatedBy *uuid.UUID
 	Percent   *float32

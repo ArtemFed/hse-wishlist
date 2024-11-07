@@ -94,12 +94,12 @@ func NewApp(cfg *config.Config) (*App, error) {
 	}
 
 	// Инициализация всех репозиториев
-	discountRepo := postgre.NewDiscountRepository(postgresDb)
+	taskRepo := postgre.NewTaskRepository(postgresDb)
 
 	// SERVICE LAYER ----------------------------------------------------------------------
 
 	// Name layer
-	discountService := service.NewDiscountService(discountRepo)
+	taskService := service.NewTaskService(taskRepo)
 
 	log.Logger.Info(fmt.Sprintf("Init %s – success", cfg.App.Name))
 
@@ -107,7 +107,7 @@ func NewApp(cfg *config.Config) (*App, error) {
 
 	mainHandler := http.NewHandler(
 		cfg,
-		discountService,
+		taskService,
 	)
 
 	// инициализируем адрес сервера
