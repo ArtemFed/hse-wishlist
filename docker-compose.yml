@@ -15,6 +15,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      - CONFIG_TASKS=./services/tasks/config/config.local.yml
       - LOGGER_LEVEL=release
       - DB_PASSWORD=${TASKS_POSTGRES_PASSWORD}
     volumes:

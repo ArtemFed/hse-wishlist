@@ -6,14 +6,12 @@ app:
   version: "1.0"
 
 postgres:
-  port: "5436"
-
-#  host: ""
-#  port: ""
-#  hostname: ""
-#  dbname: ""
-#  password: ""
-#  SSLMode: ""
+  host: "postgres"
+  port: "5432"
+  name: "tasks_db"
+  user: "postgres"
+  password: "password"
+  ssl: "disable"
 
 logger:
   env: "dev" # "prod"
