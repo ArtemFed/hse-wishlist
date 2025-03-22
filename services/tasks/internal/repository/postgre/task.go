@@ -18,22 +18,20 @@ const (
 
 const (
 	baseTaskGetQuery = `
-		SELECT uuid, created_by, percent, started_at, ended_at, status, created_at, updated_at
+		SELECT uuid, name, text, status, created_by, started_at, ended_at, created_at, updated_at
 		FROM tasks
 	`
 	createTaskQuery = `
-		INSERT INTO tasks (created_by, percent, started_at, ended_at, status)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO tasks (name, text, status)
+		VALUES ($1, $2, $3)
 		RETURNING uuid
 	`
 	updateTaskQuery = `
 		UPDATE tasks
 		SET 
-		    created_by = $2,
-		    percent = $3,
-		    started_at = $4,
-		    ended_at = $5,
-		    status = $6
+		    name = $2,
+		    text = $3,
+		    status = $4
 		WHERE uuid = $1;
 	`
 	finishTaskQuery = `

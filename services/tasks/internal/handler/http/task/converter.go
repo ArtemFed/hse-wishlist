@@ -23,7 +23,7 @@ func DomainToGet(get domain.TaskGet) TaskGet {
 		EndedAt:      get.EndedAt,
 		Status:       get.Status,
 		CreatedAt:    get.CreatedAt,
-		LastUpdateAt: get.LastUpdateAt,
+		LastUpdateAt: get.UpdateAt,
 	}
 }
 

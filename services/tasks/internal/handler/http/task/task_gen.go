@@ -13,76 +13,134 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
-// TaskCreate defines model for TaskCreate.
-type TaskCreate struct {
-	CreatedBy openapi_types.UUID `json:"CreatedBy"`
-	EndedAt   time.Time          `json:"EndedAt"`
-	Percent   float32            `json:"Percent"`
-	StartedAt time.Time          `json:"StartedAt"`
-	Status    string             `json:"Status"`
+// AccountAuth defines model for AccountAuth.
+type AccountAuth struct {
+	Login    openapi_types.UUID `json:"login"`
+	Password string             `json:"password"`
 }
 
-// TaskFilter defines model for TaskFilter.
-type TaskFilter struct {
-	CreatedBy *openapi_types.UUID `json:"CreatedBy,omitempty"`
-	Percent   *float32            `json:"Percent,omitempty"`
-	Status    *string             `json:"Status,omitempty"`
-	UUID      *openapi_types.UUID `json:"UUID,omitempty"`
+// AccountCreate defines model for AccountCreate.
+type AccountCreate struct {
+	Login    openapi_types.UUID `json:"login"`
+	Password string             `json:"password"`
 }
 
-// TaskGet defines model for TaskGet.
-type TaskGet struct {
-	CreatedAt    time.Time          `json:"CreatedAt"`
-	CreatedBy    openapi_types.UUID `json:"CreatedBy"`
-	EndedAt      time.Time          `json:"EndedAt"`
-	LastUpdateAt time.Time          `json:"LastUpdateAt"`
-	Percent      float32            `json:"Percent"`
-	StartedAt    time.Time          `json:"StartedAt"`
-	Status       string             `json:"Status"`
-	UUID         openapi_types.UUID `json:"UUID"`
+// AccountGet defines model for AccountGet.
+type AccountGet struct {
+	CreatedAt time.Time          `json:"createdAt"`
+	Id        openapi_types.UUID `json:"id"`
+	Login     string             `json:"login"`
+	UpdatedAt time.Time          `json:"updatedAt"`
 }
 
-// TaskUpdate defines model for TaskUpdate.
-type TaskUpdate struct {
-	CreatedBy openapi_types.UUID `json:"CreatedBy"`
-	EndedAt   time.Time          `json:"EndedAt"`
-	Percent   float32            `json:"Percent"`
-	StartedAt time.Time          `json:"StartedAt"`
-	Status    string             `json:"Status"`
-	UUID      openapi_types.UUID `json:"UUID"`
+// AccountUpdate defines model for AccountUpdate.
+type AccountUpdate struct {
+	Id       openapi_types.UUID `json:"id"`
+	Login    openapi_types.UUID `json:"login"`
+	Password string             `json:"password"`
 }
 
 // ModelUUID defines model for ModelUUID.
 type ModelUUID struct {
-	UUID openapi_types.UUID `json:"UUID"`
+	Id openapi_types.UUID `json:"id"`
 }
 
-// GetTasksJSONRequestBody defines body for GetTasks for application/json ContentType.
-type GetTasksJSONRequestBody = TaskFilter
+// TaskCreate defines model for TaskCreate.
+type TaskCreate struct {
+	CreatedBy openapi_types.UUID `json:"createdBy"`
+	EndedAt   time.Time          `json:"endedAt"`
+	Name      string             `json:"name"`
+	StartedAt time.Time          `json:"startedAt"`
+	Text      string             `json:"text"`
+}
 
-// PostTasksJSONRequestBody defines body for PostTasks for application/json ContentType.
-type PostTasksJSONRequestBody = TaskCreate
+// TaskGet defines model for TaskGet.
+type TaskGet struct {
+	CreatedAt time.Time          `json:"CreatedAt"`
+	UpdateAt  time.Time          `json:"UpdateAt"`
+	CreatedBy openapi_types.UUID `json:"createdBy"`
+	EndedAt   time.Time          `json:"endedAt"`
+	Id        openapi_types.UUID `json:"id"`
+	Name      string             `json:"name"`
+	StartedAt time.Time          `json:"startedAt"`
+	Status    string             `json:"status"`
+	Text      string             `json:"text"`
+}
 
-// PutTasksJSONRequestBody defines body for PutTasks for application/json ContentType.
-type PutTasksJSONRequestBody = TaskUpdate
+// TaskUpdate defines model for TaskUpdate.
+type TaskUpdate struct {
+	CreatedBy openapi_types.UUID `json:"createdBy"`
+	EndedAt   time.Time          `json:"endedAt"`
+	Id        openapi_types.UUID `json:"id"`
+	Name      string             `json:"name"`
+	StartedAt time.Time          `json:"startedAt"`
+	Status    string             `json:"status"`
+	Text      string             `json:"text"`
+}
+
+// GetApiV1AccountsParams defines parameters for GetApiV1Accounts.
+type GetApiV1AccountsParams struct {
+	Id *openapi_types.UUID `form:"id,omitempty" json:"id,omitempty"`
+}
+
+// GetApiV1TasksParams defines parameters for GetApiV1Tasks.
+type GetApiV1TasksParams struct {
+	Id          *openapi_types.UUID `form:"id,omitempty" json:"id,omitempty"`
+	CreatedBy   *openapi_types.UUID `form:"createdBy,omitempty" json:"createdBy,omitempty"`
+	Status      *string             `form:"status,omitempty" json:"status,omitempty"`
+	StartedAtLB *time.Time          `form:"startedAtLB,omitempty" json:"startedAtLB,omitempty"`
+	StartedAtRB *time.Time          `form:"startedAtRB,omitempty" json:"startedAtRB,omitempty"`
+	EndedAtLB   *time.Time          `form:"endedAtLB,omitempty" json:"endedAtLB,omitempty"`
+	EndedAtRB   *time.Time          `form:"endedAtRB,omitempty" json:"endedAtRB,omitempty"`
+}
+
+// PatchApiV1TasksParams defines parameters for PatchApiV1Tasks.
+type PatchApiV1TasksParams struct {
+	Id     openapi_types.UUID `form:"id" json:"id"`
+	Status string             `form:"status" json:"status"`
+}
+
+// PostApiV1AccountsJSONRequestBody defines body for PostApiV1Accounts for application/json ContentType.
+type PostApiV1AccountsJSONRequestBody = AccountCreate
+
+// PutApiV1AccountsJSONRequestBody defines body for PutApiV1Accounts for application/json ContentType.
+type PutApiV1AccountsJSONRequestBody = AccountUpdate
+
+// PostApiV1AuthJSONRequestBody defines body for PostApiV1Auth for application/json ContentType.
+type PostApiV1AuthJSONRequestBody = AccountAuth
+
+// PostApiV1TasksJSONRequestBody defines body for PostApiV1Tasks for application/json ContentType.
+type PostApiV1TasksJSONRequestBody = TaskCreate
+
+// PutApiV1TasksJSONRequestBody defines body for PutApiV1Tasks for application/json ContentType.
+type PutApiV1TasksJSONRequestBody = TaskUpdate
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// List Accounts
+	// (GET /api/v1/accounts)
+	GetApiV1Accounts(c *gin.Context, params GetApiV1AccountsParams)
+	// Create an Accounts
+	// (POST /api/v1/accounts)
+	PostApiV1Accounts(c *gin.Context)
+	// Update account
+	// (PUT /api/v1/accounts)
+	PutApiV1Accounts(c *gin.Context)
+	// Login
+	// (POST /api/v1/auth)
+	PostApiV1Auth(c *gin.Context)
 	// List tasks
-	// (GET /tasks)
-	GetTasks(c *gin.Context)
+	// (GET /api/v1/tasks)
+	GetApiV1Tasks(c *gin.Context, params GetApiV1TasksParams)
+	// Change task status
+	// (PATCH /api/v1/tasks)
+	PatchApiV1Tasks(c *gin.Context, params PatchApiV1TasksParams)
 	// Create a task
-	// (POST /tasks)
-	PostTasks(c *gin.Context)
+	// (POST /api/v1/tasks)
+	PostApiV1Tasks(c *gin.Context)
 	// Update a task
-	// (PUT /tasks)
-	PutTasks(c *gin.Context)
-	// Get task by ID
-	// (GET /tasks/{id})
-	GetTasksId(c *gin.Context, id openapi_types.UUID)
-	// End a task
-	// (PATCH /tasks/{id}/end)
-	PatchTasksIdEnd(c *gin.Context, id openapi_types.UUID)
+	// (PUT /api/v1/tasks)
+	PutApiV1Tasks(c *gin.Context)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -94,54 +152,17 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(c *gin.Context)
 
-// GetTasks operation middleware
-func (siw *ServerInterfaceWrapper) GetTasks(c *gin.Context) {
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		middleware(c)
-		if c.IsAborted() {
-			return
-		}
-	}
-
-	siw.Handler.GetTasks(c)
-}
-
-// PostTasks operation middleware
-func (siw *ServerInterfaceWrapper) PostTasks(c *gin.Context) {
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		middleware(c)
-		if c.IsAborted() {
-			return
-		}
-	}
-
-	siw.Handler.PostTasks(c)
-}
-
-// PutTasks operation middleware
-func (siw *ServerInterfaceWrapper) PutTasks(c *gin.Context) {
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		middleware(c)
-		if c.IsAborted() {
-			return
-		}
-	}
-
-	siw.Handler.PutTasks(c)
-}
-
-// GetTasksId operation middleware
-func (siw *ServerInterfaceWrapper) GetTasksId(c *gin.Context) {
+// GetApiV1Accounts operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1Accounts(c *gin.Context) {
 
 	var err error
 
-	// ------------- Path parameter "id" -------------
-	var id openapi_types.UUID
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetApiV1AccountsParams
 
-	err = runtime.BindStyledParameter("simple", false, "id", c.Param("id"), &id)
+	// ------------- Optional query parameter "id" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "id", c.Request.URL.Query(), &params.Id)
 	if err != nil {
 		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter id: %w", err), http.StatusBadRequest)
 		return
@@ -154,20 +175,109 @@ func (siw *ServerInterfaceWrapper) GetTasksId(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetTasksId(c, id)
+	siw.Handler.GetApiV1Accounts(c, params)
 }
 
-// PatchTasksIdEnd operation middleware
-func (siw *ServerInterfaceWrapper) PatchTasksIdEnd(c *gin.Context) {
+// PostApiV1Accounts operation middleware
+func (siw *ServerInterfaceWrapper) PostApiV1Accounts(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PostApiV1Accounts(c)
+}
+
+// PutApiV1Accounts operation middleware
+func (siw *ServerInterfaceWrapper) PutApiV1Accounts(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PutApiV1Accounts(c)
+}
+
+// PostApiV1Auth operation middleware
+func (siw *ServerInterfaceWrapper) PostApiV1Auth(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PostApiV1Auth(c)
+}
+
+// GetApiV1Tasks operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1Tasks(c *gin.Context) {
 
 	var err error
 
-	// ------------- Path parameter "id" -------------
-	var id openapi_types.UUID
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetApiV1TasksParams
 
-	err = runtime.BindStyledParameter("simple", false, "id", c.Param("id"), &id)
+	// ------------- Optional query parameter "id" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "id", c.Request.URL.Query(), &params.Id)
 	if err != nil {
 		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "createdBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "createdBy", c.Request.URL.Query(), &params.CreatedBy)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter createdBy: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "status" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "status", c.Request.URL.Query(), &params.Status)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter status: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "startedAtLB" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "startedAtLB", c.Request.URL.Query(), &params.StartedAtLB)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter startedAtLB: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "startedAtRB" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "startedAtRB", c.Request.URL.Query(), &params.StartedAtRB)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter startedAtRB: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "endedAtLB" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "endedAtLB", c.Request.URL.Query(), &params.EndedAtLB)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter endedAtLB: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Optional query parameter "endedAtRB" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "endedAtRB", c.Request.URL.Query(), &params.EndedAtRB)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter endedAtRB: %w", err), http.StatusBadRequest)
 		return
 	}
 
@@ -178,7 +288,81 @@ func (siw *ServerInterfaceWrapper) PatchTasksIdEnd(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PatchTasksIdEnd(c, id)
+	siw.Handler.GetApiV1Tasks(c, params)
+}
+
+// PatchApiV1Tasks operation middleware
+func (siw *ServerInterfaceWrapper) PatchApiV1Tasks(c *gin.Context) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PatchApiV1TasksParams
+
+	// ------------- Required query parameter "id" -------------
+
+	if paramValue := c.Query("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandler(c, fmt.Errorf("Query argument id is required, but not found"), http.StatusBadRequest)
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", c.Request.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	// ------------- Required query parameter "status" -------------
+
+	if paramValue := c.Query("status"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandler(c, fmt.Errorf("Query argument status is required, but not found"), http.StatusBadRequest)
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "status", c.Request.URL.Query(), &params.Status)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter status: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PatchApiV1Tasks(c, params)
+}
+
+// PostApiV1Tasks operation middleware
+func (siw *ServerInterfaceWrapper) PostApiV1Tasks(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PostApiV1Tasks(c)
+}
+
+// PutApiV1Tasks operation middleware
+func (siw *ServerInterfaceWrapper) PutApiV1Tasks(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PutApiV1Tasks(c)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -208,9 +392,12 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 		ErrorHandler:       errorHandler,
 	}
 
-	router.GET(options.BaseURL+"/tasks", wrapper.GetTasks)
-	router.POST(options.BaseURL+"/tasks", wrapper.PostTasks)
-	router.PUT(options.BaseURL+"/tasks", wrapper.PutTasks)
-	router.GET(options.BaseURL+"/tasks/:id", wrapper.GetTasksId)
-	router.PATCH(options.BaseURL+"/tasks/:id/end", wrapper.PatchTasksIdEnd)
+	router.GET(options.BaseURL+"/api/v1/accounts", wrapper.GetApiV1Accounts)
+	router.POST(options.BaseURL+"/api/v1/accounts", wrapper.PostApiV1Accounts)
+	router.PUT(options.BaseURL+"/api/v1/accounts", wrapper.PutApiV1Accounts)
+	router.POST(options.BaseURL+"/api/v1/auth", wrapper.PostApiV1Auth)
+	router.GET(options.BaseURL+"/api/v1/tasks", wrapper.GetApiV1Tasks)
+	router.PATCH(options.BaseURL+"/api/v1/tasks", wrapper.PatchApiV1Tasks)
+	router.POST(options.BaseURL+"/api/v1/tasks", wrapper.PostApiV1Tasks)
+	router.PUT(options.BaseURL+"/api/v1/tasks", wrapper.PutApiV1Tasks)
 }

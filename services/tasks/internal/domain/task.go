@@ -6,36 +6,41 @@ import (
 )
 
 type TaskGet struct {
-	UUID         uuid.UUID
-	CreatedBy    uuid.UUID
-	Percent      float32
-	StartedAt    time.Time
-	EndedAt      time.Time
-	Status       string
-	CreatedAt    time.Time
-	LastUpdateAt time.Time
+	UUID      uuid.UUID
+	Name      string
+	Text      string
+	Status    string
+	CreatedBy uuid.UUID
+	StartedAt time.Time
+	EndedAt   time.Time
+	CreatedAt time.Time
+	UpdateAt  time.Time
 }
 
 type TaskCreate struct {
+	Name      string
+	Text      string
 	CreatedBy uuid.UUID
-	Percent   float32
 	StartedAt time.Time
 	EndedAt   time.Time
-	Status    string
 }
 
 type TaskUpdate struct {
 	UUID      uuid.UUID
+	Name      string
+	Text      string
+	Status    string
 	CreatedBy uuid.UUID
-	Percent   float32
 	StartedAt time.Time
 	EndedAt   time.Time
-	Status    string
 }
 
 type TaskFilter struct {
-	UUID      *uuid.UUID
-	CreatedBy *uuid.UUID
-	Percent   *float32
-	Status    *string
+	UUID               *uuid.UUID
+	CreatedBy          *uuid.UUID
+	Status             *string
+	StartedAtLeftBound *time.Time
+	StartedAtRightAt   *time.Time
+	EndedAtLeftBound   *time.Time
+	EndedAtRightAt     *time.Time
 }

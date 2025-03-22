@@ -5,36 +5,46 @@ info:
 servers:
   - url: http://localhost:8080/api/v1
 paths:
-  /tasks/{id}:
-    get:
-      tags:
-        - Task
-      summary: Get task by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskGet'
-  /tasks:
+  /api/v1/tasks:
     get:
       tags:
         - Task
       summary: List tasks
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TaskFilter'
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: createdBy
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: startedAtLB
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: startedAtRB
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: endedAtLB
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: endedAtRB
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Successful operation
@@ -73,123 +83,260 @@ paths:
       responses:
         '200':
           description: Successful operation
-  /tasks/{id}/end:
     patch:
       tags:
         - Task
-      summary: End a task
+      summary: Change task status
       parameters:
-        - in: path
+        - in: query
           name: id
           required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /api/v1/accounts:
+    get:
+      tags:
+        - Accounts
+      summary: List Accounts
+      parameters:
+        - in: query
+          name: id
           schema:
             type: string
             format: uuid
       responses:
         '200':
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountGet'
+    post:
+      tags:
+        - Accounts
+      summary: Create an Accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreate'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelUUID'
+    put:
+      tags:
+        - Accounts
+      summary: Update account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+      responses:
+        '200':
+          description: Successful operation
+
+  /api/v1/auth:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountAuth'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelUUID'
+
 components:
   schemas:
     TaskGet:
       type: object
       properties:
-        UUID:
+        id:
           type: string
           format: uuid
-        CreatedBy:
+        name:
+          type: string
+        text:
+          type: string
+        status:
+          type: string
+        createdBy:
           type: string
           format: uuid
-        Percent:
-          type: number
-        StartedAt:
+        startedAt:
           type: string
           format: date-time
-        EndedAt:
+        endedAt:
           type: string
           format: date-time
-        Status:
-          type: string
         CreatedAt:
           type: string
           format: date-time
-        LastUpdateAt:
+        UpdateAt:
           type: string
           format: date-time
       required:
-        - UUID
-        - CreatedBy
-        - Percent
-        - StartedAt
-        - EndedAt
-        - Status
+        - id
+        - name
+        - text
+        - status
+        - createdBy
+        - startedAt
+        - endedAt
         - CreatedAt
-        - LastUpdateAt
+        - UpdateAt
+
     TaskCreate:
       type: object
       properties:
-        CreatedBy:
+        name:
+          type: string
+        text:
+          type: string
+        createdBy:
           type: string
           format: uuid
-        Percent:
-          type: number
-        StartedAt:
+        startedAt:
           type: string
           format: date-time
-        EndedAt:
+        endedAt:
           type: string
           format: date-time
-        Status:
-          type: string
       required:
-        - CreatedBy
-        - Percent
-        - StartedAt
-        - EndedAt
-        - Status
+        - name
+        - text
+        - createdBy
+        - startedAt
+        - endedAt
+
     TaskUpdate:
       type: object
       properties:
-        UUID:
+        id:
           type: string
           format: uuid
-        CreatedBy:
+        name:
+          type: string
+        text:
+          type: string
+        status:
+          type: string
+        createdBy:
           type: string
           format: uuid
-        Percent:
-          type: number
-        StartedAt:
+        startedAt:
           type: string
           format: date-time
-        EndedAt:
+        endedAt:
           type: string
           format: date-time
-        Status:
-          type: string
       required:
-        - UUID
-        - CreatedBy
-        - Percent
-        - StartedAt
-        - EndedAt
-        - Status
-    TaskFilter:
+        - id
+        - name
+        - text
+        - status
+        - createdBy
+        - startedAt
+        - endedAt
+    
+    AccountGet:
       type: object
       properties:
-        UUID:
+        id:
           type: string
           format: uuid
-        CreatedBy:
+        login:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - login
+        - createdAt
+        - updatedAt
+
+    AccountCreate:
+      type: object
+      properties:
+        login:
           type: string
           format: uuid
-        Percent:
-          type: number
-        Status:
+        password:
           type: string
+      required:
+        - login
+        - password
+
+    AccountUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        login:
+          type: string
+          format: uuid
+        password:
+          type: string
+      required:
+        - id
+        - login
+        - password
+
+    AccountAuth:
+      type: object
+      properties:
+        login:
+          type: string
+          format: uuid
+        password:
+          type: string
+      required:
+        - login
+        - password
+
     ModelUUID:
       type: object
       properties:
-        UUID:
+        id:
           type: string
           format: uuid
       required:
-        - UUID
+        - id
+
+    JwtToken:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - id

@@ -1,5 +1,6 @@
 package postgre
 
 const (
-	TasksTable = "tasks"
+	TasksTable    = "tasks"
+	AccountsTable = "accounts"
 )

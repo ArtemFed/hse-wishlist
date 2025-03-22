@@ -6,50 +6,57 @@ import (
 	"time"
 )
 
+const InitStatus = "Created"
+
 type Task struct {
-	UUID          uuid.UUID `db:"uuid"`
-	CreatedBy     uuid.UUID `db:"created_by"`
-	Percent       float32   `db:"percent"`
-	StartedAt     time.Time `db:"started_at"`
-	EndedAt       time.Time `db:"ended_at"`
-	Status        string    `db:"status"`
-	CreatedAt     time.Time `db:"created_at"`
-	LastUpdatedAt time.Time `db:"updated_at"`
+	UUID      uuid.UUID `db:"uuid"`
+	Name      string    `db:"name"`
+	Text      string    `db:"text"`
+	Status    string    `db:"status"`
+	CreatedBy uuid.UUID `db:"created_by"`
+	StartedAt time.Time `db:"started_at"`
+	EndedAt   time.Time `db:"ended_at"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 func CreateToTaskPostgres(model *domain.TaskCreate) *Task {
 	id, _ := uuid.NewUUID()
 	return &Task{
 		UUID:      id,
+		Name:      model.Name,
+		Text:      model.Text,
+		Status:    InitStatus,
 		CreatedBy: model.CreatedBy,
-		Percent:   model.Percent,
 		StartedAt: model.StartedAt,
 		EndedAt:   model.EndedAt,
-		Status:    model.Status,
 		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 }
 
 func UpdateToTaskPostgres(model *domain.TaskUpdate) *Task {
 	return &Task{
 		UUID:      model.UUID,
+		Name:      model.Name,
+		Text:      model.Text,
+		Status:    model.Status,
 		CreatedBy: model.CreatedBy,
-		Percent:   model.Percent,
 		StartedAt: model.StartedAt,
 		EndedAt:   model.EndedAt,
-		Status:    model.Status,
 	}
 }
 
 func ToTaskDomain(model *Task) *domain.TaskGet {
 	return &domain.TaskGet{
-		UUID:         model.UUID,
-		CreatedBy:    model.CreatedBy,
-		Percent:      model.Percent,
-		StartedAt:    model.StartedAt,
-		EndedAt:      model.EndedAt,
-		Status:       model.Status,
-		CreatedAt:    model.CreatedAt,
-		LastUpdateAt: model.LastUpdatedAt,
+		UUID:      model.UUID,
+		Name:      model.Name,
+		Text:      model.Text,
+		Status:    model.Status,
+		CreatedBy: model.CreatedBy,
+		StartedAt: model.StartedAt,
+		EndedAt:   model.EndedAt,
+		CreatedAt: model.CreatedAt,
+		UpdateAt:  model.UpdatedAt,
 	}
 }
