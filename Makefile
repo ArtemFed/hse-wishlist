@@ -1,5 +1,8 @@
 include .env
 
+gen:
+	oapi-codegen --config ./services/tasks/.codegen/task-codegen-config.yaml ./services/tasks/.codegen/task-codegen.yaml
+
 # Взлёты
 
 up:

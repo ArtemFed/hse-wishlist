@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: tasks-svc
-#          image: services/tasks:latest  # Убедитесь, что ваш образ доступен в вашем репозитории
+#          image: services/tasks:latest  # образ должен быть доступен в репозитории
           image: sirdaukar/hse_wishlist:latest
           ports:
             - containerPort: 8082
@@ -22,20 +22,33 @@ spec:
             - name: CONFIG_TASKS
               value: ./services/tasks/config/config.local.yml
             - name: ENV_FILE
-              value: ./services/tasks/config/config.local.yml
+              value: ./services/tasks/.env
             - name: LOGGER_LEVEL
-              value: release
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: tasks-postgres-secret
-                  key: password
+              value: debug
+#            - name: DB_PASSWORD
+#              value: password
+#              valueFrom:
+#                secretKeyRef:
+#                  name: tasks-postgres-secret
+#                  key: password
+#            - name: POSTGRES_DB
+#              value: tasks_db
+#            - name: POSTGRES_USER
+#              value: postgres
+#            - name: POSTGRES_PASSWORD
+#              value: password
+#            - name: POSTGRES_HOST
+#              value: tasks_db
+#            - name: POSTGRES_PORT
+#              value: "5432"
+#            - name: POSTGRES_SSL
+#              value: disable
           volumeMounts:
             - name: migrations-data
               mountPath: /services/tasks/migrations
-      depends_on:
-        - name: postgres
-          condition: service-healthy
+#      depends_on:
+#        - name: postgres
+#          condition: service-healthy
       volumes:
         - name: migrations-data
           emptyDir: {}

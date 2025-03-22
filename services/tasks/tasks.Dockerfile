@@ -27,7 +27,3 @@ COPY --from=build /app/services/tasks/config/config.docker.yml ./services/tasks/
 CMD ["./tasks-svc"]
 
 EXPOSE 8082
-
-#kubectl create deployment k8s-hse-wishlist --image=kicbase/echo-server:1.0
-#kubectl expose deployment k8s-hse-wishlist --type=LoadBalancer --port=8080
-#kubectl get service

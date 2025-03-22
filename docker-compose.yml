@@ -27,7 +27,7 @@ services:
     networks:
       - new
     ports:
-      - "5436:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_DB=${TASKS_POSTGRES_NAME}
       - POSTGRES_HOST=${TASKS_POSTGRES_HOST}

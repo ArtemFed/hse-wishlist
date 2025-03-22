@@ -10,4 +10,3 @@ spec:
       port: 8082
       targetPort: 8082
   type: NodePort
-  nodePort: 30001  # Выберите свободный NodePort

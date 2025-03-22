@@ -23,14 +23,15 @@ spec:
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: tasks-postgres-secret
-                  key: password
+              value: password
+#              valueFrom:
+#                secretKeyRef:
+#                  name: tasks-postgres-secret
+#                  key: password
             - name: POSTGRES_HOST
-              value: postgres
+              value: 0.0.0.0
             - name: POSTGRES_PORT
-              value: 5432
+              value: "5432"
             - name: POSTGRES_SSL
               value: disable
           volumeMounts:
