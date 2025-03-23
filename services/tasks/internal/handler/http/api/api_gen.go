@@ -56,11 +56,10 @@ type ModelUUID struct {
 
 // TaskCreate defines model for TaskCreate.
 type TaskCreate struct {
-	CreatedBy openapi_types.UUID `json:"createdBy"`
-	EndedAt   time.Time          `json:"endedAt"`
-	Name      string             `json:"name"`
-	StartedAt time.Time          `json:"startedAt"`
-	Text      string             `json:"text"`
+	EndedAt   time.Time `json:"endedAt"`
+	Name      string    `json:"name"`
+	StartedAt time.Time `json:"startedAt"`
+	Text      string    `json:"text"`
 }
 
 // TaskGet defines model for TaskGet.

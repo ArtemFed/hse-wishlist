@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/domain"
+	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
 	"github.com/google/uuid"
 )
@@ -54,6 +55,10 @@ func (s *taskService) Create(ctx context.Context, task domain.TaskCreate) (*uuid
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Create")
 	defer span.End()
 
+	uuidRaw := ctx.Value(http.CtxAccountId)
+	if uuidRaw != nil {
+		task.CreatedBy = uuidRaw.(uuid.UUID)
+	}
 	id, err := s.r.Create(newCtx, task)
 	if err != nil {
 		return nil, err

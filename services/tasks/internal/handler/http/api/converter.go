@@ -8,7 +8,6 @@ func TaskCreateToDomain(create TaskCreate) domain.TaskCreate {
 	return domain.TaskCreate{
 		Name:      create.Name,
 		Text:      create.Text,
-		CreatedBy: create.CreatedBy,
 		StartedAt: create.StartedAt,
 		EndedAt:   create.EndedAt,
 	}

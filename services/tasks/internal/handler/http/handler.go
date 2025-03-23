@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/config"
+	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/domain"
 	task "github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/api"
 	http2 "github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/utils"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
@@ -18,7 +19,7 @@ const (
 	apiPrefix    = "api"
 	version      = "1"
 	authHeader   = "Authorization"
-	ctxAccountId = "accountId"
+	CtxAccountId = "accountId"
 )
 
 type MiddlewareFunc func(c *gin.Context)
@@ -107,26 +108,34 @@ func getVersion() string {
 
 // IdentityMiddleware middleware для проверки авторизации
 func (h *Handler) IdentityMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		log.Print("FullPath", c.FullPath())
-		if strings.HasPrefix(c.FullPath(), "/api/v1/hse/auth") {
-			c.Next()
+	return func(ctx *gin.Context) {
+		log.Print("FullPath", ctx.FullPath())
+		if strings.HasPrefix(ctx.FullPath(), "/api/v1/hse/auth") {
+			ctx.Next()
 			return
 		}
-		header := c.GetHeader(authHeader)
+		header := ctx.GetHeader(authHeader)
 		if header == "" {
-			http2.AbortWithBadResponse(c, http.StatusUnauthorized, errors.New("empty auth header"))
+			http2.AbortWithBadResponse(ctx, http.StatusUnauthorized, errors.New("empty auth header"))
 			return
 		}
 
 		bearerToken := strings.TrimPrefix(header, "Bearer ")
 		accountId, err := h.authService.ParseToken(bearerToken)
 		if err != nil {
-			http2.AbortWithBadResponse(c, http.StatusUnauthorized, errors.New("empty auth header"))
+			http2.AbortWithBadResponse(ctx, http.StatusUnauthorized, errors.New("invalid token 1"))
 			return
 		}
 
-		c.Set(ctxAccountId, accountId)
-		c.Next()
+		list, err := h.accountService.List(ctx, domain.AccountFilter{
+			UUID: &accountId,
+		})
+		if len(list) == 0 {
+			http2.AbortWithBadResponse(ctx, http.StatusUnauthorized, errors.New("invalid token 2"))
+			return
+		}
+
+		ctx.Set(CtxAccountId, accountId)
+		ctx.Next()
 	}
 }
