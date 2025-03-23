@@ -11,6 +11,8 @@ HSE course project for Industrial Software Engineering
 
 > minikube start
 
+> kubectl create namespace monitoring 
+
 ## Запуск манифестов в кубере
 
 > kubectl apply -f deployments/k8s/postgres-pvc.yaml
@@ -25,6 +27,8 @@ HSE course project for Industrial Software Engineering
 
 > kubectl apply -f deployments/k8s/migrate-up-job.yaml
 
+> kubectl apply -f deployments/k8s/migrate-down-job.yaml
+
 > kubectl apply -f deployments/k8s/tasks-svc-deployment.yaml
 
 > kubectl apply -f deployments/k8s/tasks-svc-service.yaml
@@ -35,11 +39,39 @@ HSE course project for Industrial Software Engineering
 
 > kubectl apply -f deployments/k8s/fluent-bit-daemonset.yaml
 
+> kubectl apply -f deployments/k8s/prometheus-configmap.yaml
+
+> kubectl apply -f deployments/k8s/prometheus-deployment.yaml
+
+> kubectl apply -f deployments/k8s/prometheus-service.yaml
+
+> kubectl apply -f deployments/k8s/prometheus-ingress.yaml
+
+> kubectl apply -f deployments/k8s/grafana-configmap.yaml
+
+> kubectl apply -f deployments/k8s/grafana-deployment.yaml
+
+> kubectl apply -f deployments/k8s/grafana-service.yaml
+
+> kubectl apply -f deployments/k8s/grafana-ingress.yaml
+
+> kubectl apply -f deployments/k8s/jaeger-deployment.yaml
+
+> kubectl apply -f deployments/k8s/jaeger-service.yaml
+
+> kubectl apply -f deployments/k8s/otel-configmap.yaml
+
+> kubectl apply -f deployments/k8s/otel-deployment.yaml
+
+> kubectl apply -f deployments/k8s/otel-service.yaml
+
 > minikube status
 
 ## Логи:
 
 > kubectl get pods
+
+> kubectl get pods --namespace=monitoring
 
 > kubectl logs -f (pod name)
 

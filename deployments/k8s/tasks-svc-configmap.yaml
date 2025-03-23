@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: tasks-svc-config
+  namespace: default
 data:
   config.local.yml: |
     apiVersion: "1.0.0"
@@ -47,4 +48,4 @@ data:
     
     tracer:
       enable: false
-      exp_target: "host.docker.internal:4317"
+      exp_target: "otel-collector:4317"
