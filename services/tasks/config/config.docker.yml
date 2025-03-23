@@ -40,5 +40,5 @@ http:
   write_timeout: "15s"
 
 tracer:
-  enable: false
+  enable: true
   exp_target: "host.docker.internal:4317"

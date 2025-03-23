@@ -15,14 +15,28 @@ kubectl get service
 
 > minikube start
 
+> kubectl apply -f deployments/k8s/postgres-pvc.yaml
+> kubectl apply -f deployments/k8s/postgres-deployment.yaml
+> kubectl apply -f deployments/k8s/postgres-service.yaml
+> kubectl apply -f deployments/k8s/tasks-svc-configmap.yaml
+> kubectl apply -f deployments/k8s/migrate-configmap.yaml
+> kubectl apply -f deployments/k8s/migrate-job.yaml
+> kubectl apply -f deployments/k8s/tasks-svc-deployment.yaml
+> kubectl apply -f deployments/k8s/tasks-svc-service.yaml
+> kubectl apply -f deployments/k8s/tasks-svc-ingress.yaml
+> kubectl apply -f deployments/k8s/fluent-bit-configmap.yaml
+> kubectl apply -f deployments/k8s/fluent-bit-daemonset.yaml
+
 > minikube status
 
-> kubectl create deployment k8s-hse-wishlist --image=sirdaukar/hse_wishlist:latest
+> kubectl get pods
 
-> kubectl expose deployment k8s-hse-wishlist --port=5432
+> kubectl logs -f <pod name>
 
-> kubectl get service ***
+Чтобы сделать туннель для Postgres
+> kubectl port-forward svc/postgres 5432:5432
 
-> kubectl apply -f deployments/k8s/k8s-dpl-tasks-svc-config.yaml
+Чтобы сделать туннель для Приложения
+> kubectl port-forward svc/tasks-svc 8082:8082
 
-> kubectl apply -f deployments/k8s/k8s-dpl-postgres-config.yaml
+

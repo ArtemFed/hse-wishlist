@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/ArtemFed/hse-wishlist/pkg/metrics"
 	"github.com/ArtemFed/hse-wishlist/pkg/xdb/postgres"
 	"github.com/ArtemFed/hse-wishlist/pkg/xerror"
 	"github.com/ArtemFed/hse-wishlist/pkg/xshutdown"
@@ -73,16 +72,16 @@ func NewApp(cfg *config.Config) (*App, error) {
 	}
 
 	// Инициализируем Prometheus
-	if cfg.Metrics.Enable {
-		metrics.InitOnce(cfg.Metrics, log.Logger, metrics.AppInfo{
-			Name:        cfg.App.Name,
-			Environment: string(cfg.App.Environment),
-			Version:     cfg.App.Version,
-		})
-		log.Logger.Info("Init Metrics – success")
-	} else {
-		log.Logger.Info("Init Metrics – skipped")
-	}
+	//if cfg.Metrics.Enable {
+	//	metrics.InitOnce(cfg.Metrics, log.Logger, metrics.AppInfo{
+	//		Name:        cfg.App.Name,
+	//		Environment: string(cfg.App.Environment),
+	//		Version:     cfg.App.Version,
+	//	})
+	//	log.Logger.Info("Init Metrics – success")
+	//} else {
+	//	log.Logger.Info("Init Metrics – skipped")
+	//}
 
 	// REPOSITORY ----------------------------------------------------------------------
 

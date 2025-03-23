@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/ArtemFed/hse-wishlist/pkg/metrics"
 	"github.com/ArtemFed/hse-wishlist/pkg/xapp"
 	"github.com/ArtemFed/hse-wishlist/pkg/xconfig"
 	"github.com/ArtemFed/hse-wishlist/pkg/xdb/postgres"
@@ -20,7 +19,7 @@ type Config struct {
 	Postgres         *postgres.Config  `mapstructure:"postgres"`
 	GracefulShutdown *xshutdown.Config `mapstructure:"graceful_shutdown"`
 	Tracer           *xtracer.Config   `mapstructure:"tracer"`
-	Metrics          *metrics.Config   `mapstructure:"metrics"`
+	//Metrics          *metrics.Config   `mapstructure:"metrics"`
 }
 
 func NewConfig(filePath string, appName string) (*Config, error) {

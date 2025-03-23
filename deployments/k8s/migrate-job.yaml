@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  template:
+    metadata:
+      name: migrate
+    spec:
+      containers:
+        - name: migrate
+          image: migrate/migrate
+          command: [ "-path", "/services/tasks/migrations", "-database", "postgres://postgres:password@postgres:5432/tasks_db?sslmode=disable", "up" ]
+          volumeMounts:
+            - name: migrations-data
+              mountPath: /services/tasks/migrations
+      volumes:
+        - name: migrations-data
+          configMap:
+            name: migrate-configmap
+      restartPolicy: OnFailure

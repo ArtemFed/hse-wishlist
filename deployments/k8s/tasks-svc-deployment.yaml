@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks-svc
+  template:
+    metadata:
+      labels:
+        app: tasks-svc
+    spec:
+      containers:
+        - name: tasks-svc
+          image: sirdaukar/hse_wishlist:latest
+          ports:
+            - containerPort: 8082
+          env:
+            - name: CONFIG_TASKS
+              value: /services/tasks/config/config.local.yml
+            - name: LOGGER_LEVEL
+              value: debug
+          volumeMounts:
+            - name: config-volume
+              mountPath: /services/tasks/config
+            - name: migrations-data
+              mountPath: /services/tasks/migrations
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tasks-svc-config
+        - name: migrations-data
+          configMap:
+            name: migrate-configmap

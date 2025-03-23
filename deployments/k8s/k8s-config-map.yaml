@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: tasks-config
-data:
-  config.yml: |
-    # Вставьте содержимое вашего config.local.yml сюда

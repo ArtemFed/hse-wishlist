@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tasks-svc-config
+data:
+  config.local.yml: |
+    apiVersion: "1.0.0"
+    
+    app:
+      name: "hse"
+      env: "dev"
+      version: "1.0"
+    
+    postgres:
+      host: "postgres"
+      port: "5432"
+      name: "tasks_db"
+      user: "postgres"
+      password: "password"
+      ssl: "disable"
+    
+    logger:
+      env: "dev"
+      level: "info"
+      outputs:
+        - "stdout"
+      error_outputs:
+        - "stderr"
+      encoding: "json"
+      sentry_level: "error"
+      sentry_dsn: ""
+    
+    metrics:
+      enable: true
+      dsn: "<sentry_dsn_for_service>"
+    
+    graceful_shutdown:
+      delay: "3s"
+      wait_timeout: "15s"
+      callback_timeout: "5s"
+    
+    http:
+      host: "0.0.0.0"
+      port: 8082
+      read_timeout: "15s"
+      write_timeout: "15s"
+    
+    tracer:
+      enable: false
+      exp_target: "host.docker.internal:4317"

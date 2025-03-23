@@ -34,6 +34,7 @@ func Init(cfg *Config, appCfg *xapp.Config) (*sdktrace.TracerProvider, error) {
 		ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 		defer cancel()
 
+		log.Print("cfg.ExpTarget", cfg.ExpTarget)
 		conn, err := grpc.DialContext(ctx,
 			cfg.ExpTarget,
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
