@@ -1,16 +1,21 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migrate
+  name: migrate-down
 spec:
   template:
     metadata:
-      name: migrate
+      name: migrate-down
     spec:
       containers:
-        - name: migrate
+        - name: migrate-down
           image: migrate/migrate
-          command: [ "-path", "/services/tasks/migrations", "-database", "postgres://postgres:password@postgres:5432/tasks_db?sslmode=disable", "up" ]
+          command:
+            - migrate
+            - -path=/services/tasks/migrations
+            - -database=postgres://postgres:password@postgres:5432/tasks_db?sslmode=disable
+            - down
+            - "1"
           volumeMounts:
             - name: migrations-data
               mountPath: /services/tasks/migrations
