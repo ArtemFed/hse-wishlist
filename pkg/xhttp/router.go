@@ -22,5 +22,6 @@ func NewRouter() *Router {
 func (r *Router) RegisterSystemHandlers() {
 	s := r.Router().Group("/system")
 	middleware.Ping(s)
+	middleware.Swagger(s)
 	middleware.Prometheus(s)
 }

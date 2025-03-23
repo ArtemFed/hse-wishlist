@@ -61,8 +61,7 @@ type TaskCreate struct {
 
 // TaskGet defines model for TaskGet.
 type TaskGet struct {
-	CreatedAt time.Time          `json:"CreatedAt"`
-	UpdateAt  time.Time          `json:"UpdateAt"`
+	CreatedAt time.Time          `json:"createdAt"`
 	CreatedBy openapi_types.UUID `json:"createdBy"`
 	EndedAt   time.Time          `json:"endedAt"`
 	Id        openapi_types.UUID `json:"id"`
@@ -70,6 +69,7 @@ type TaskGet struct {
 	StartedAt time.Time          `json:"startedAt"`
 	Status    string             `json:"status"`
 	Text      string             `json:"text"`
+	UpdateAt  time.Time          `json:"updateAt"`
 }
 
 // TaskUpdate defines model for TaskUpdate.

@@ -22,8 +22,16 @@ type Handler struct {
 	authService    adapters.AuthService
 }
 
-func NewTaskHandler(taskService adapters.TaskService) *Handler {
-	return &Handler{taskService: taskService}
+func NewTaskHandler(
+	taskService adapters.TaskService,
+	accountService adapters.AccountService,
+	authService adapters.AuthService,
+) *Handler {
+	return &Handler{
+		taskService:    taskService,
+		accountService: accountService,
+		authService:    authService,
+	}
 }
 
 func (h *Handler) GetAccounts(ctx *gin.Context, params GetAccountsParams) {

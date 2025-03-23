@@ -18,16 +18,22 @@ const (
 type MiddlewareFunc func(c *gin.Context)
 
 type Handler struct {
-	cfg         *config.Config
-	taskService adapters.TaskService
+	cfg            *config.Config
+	taskService    adapters.TaskService
+	accountService adapters.AccountService
+	authService    adapters.AuthService
 }
 
 func NewHandler(cfg *config.Config,
 	taskService adapters.TaskService,
+	accountService adapters.AccountService,
+	authService adapters.AuthService,
 ) Handler {
 	return Handler{
-		cfg:         cfg,
-		taskService: taskService,
+		cfg:            cfg,
+		taskService:    taskService,
+		accountService: accountService,
+		authService:    authService,
 	}
 }
 
@@ -55,7 +61,11 @@ func InitHandler(
 	baseUrl := fmt.Sprintf("%s/%s/%s", apiPrefix, getVersion(), httpPrefix)
 
 	task.RegisterHandlersWithOptions(router,
-		task.NewTaskHandler(handler.taskService),
+		task.NewTaskHandler(
+			handler.taskService,
+			handler.accountService,
+			handler.authService,
+		),
 		task.GinServerOptions{
 			BaseURL:      baseUrl,
 			Middlewares:  ConvertToTask(middlewares),

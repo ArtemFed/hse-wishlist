@@ -194,10 +194,10 @@ components:
         endedAt:
           type: string
           format: date-time
-        CreatedAt:
+        createdAt:
           type: string
           format: date-time
-        UpdateAt:
+        updateAt:
           type: string
           format: date-time
       required:
@@ -208,8 +208,8 @@ components:
         - createdBy
         - startedAt
         - endedAt
-        - CreatedAt
-        - UpdateAt
+        - createdAt
+        - updateAt
 
     TaskCreate:
       type: object

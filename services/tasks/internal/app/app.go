@@ -95,11 +95,14 @@ func NewApp(cfg *config.Config) (*App, error) {
 
 	// Инициализация всех репозиториев
 	taskRepo := postgre.NewTaskRepository(postgresDb)
+	accountRepo := postgre.NewAccountRepository(postgresDb)
 
 	// SERVICE LAYER ----------------------------------------------------------------------
 
 	// Name layer
 	taskService := service.NewTaskService(taskRepo)
+	accountService := service.NewAccountService(accountRepo)
+	authService := service.NewAuthService()
 
 	log.Logger.Info(fmt.Sprintf("Init %s – success", cfg.App.Name))
 
@@ -108,6 +111,8 @@ func NewApp(cfg *config.Config) (*App, error) {
 	mainHandler := http.NewHandler(
 		cfg,
 		taskService,
+		accountService,
+		authService,
 	)
 
 	// инициализируем адрес сервера
