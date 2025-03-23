@@ -22,8 +22,6 @@ func init() {
 }
 
 func main() {
-	FAIL
-
 	ctx := context.Background()
 
 	cfgEnvName := "CONFIG_" + ServiceCapsName
