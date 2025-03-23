@@ -30,7 +30,8 @@ type Handler struct {
 	authService    adapters.AuthService
 }
 
-func NewHandler(cfg *config.Config,
+func NewHandler(
+	cfg *config.Config,
 	taskService adapters.TaskService,
 	accountService adapters.AccountService,
 	authService adapters.AuthService,

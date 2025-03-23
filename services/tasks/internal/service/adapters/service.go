@@ -14,9 +14,9 @@ const (
 
 type TaskService interface {
 	List(ctx context.Context, filter domain.TaskFilter) ([]domain.TaskGet, error)
-	Patch(ctx context.Context, id uuid.UUID, status string) error
 	Create(ctx context.Context, task domain.TaskCreate) (*uuid.UUID, error)
 	Update(ctx context.Context, task domain.TaskUpdate) error
+	Patch(ctx context.Context, id uuid.UUID, status string) error
 }
 
 type AccountService interface {
