@@ -69,7 +69,9 @@ func (a *App) startHTTPServer(ctx context.Context) {
 	middlewares = append(middlewares, http.MiddlewareFunc(ginzap.Ginzap(log.Logger, time.RFC3339, true)))
 	middlewares = append(middlewares, http.MiddlewareFunc(requestid.RequestID(nil)))
 
-	http.InitHandler(a.handler, router.Router(), middlewares, "hse")
+	middlewares = append(middlewares, http.MiddlewareFunc(a.handler.IdentityMiddleware()))
+
+	http.InitMainHandler(a.handler, router.Router(), middlewares, "hse")
 
 	srv := xhttp.NewServer(a.cfg.Http, router)
 

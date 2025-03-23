@@ -22,7 +22,7 @@ type Handler struct {
 	authService    adapters.AuthService
 }
 
-func NewTaskHandler(
+func NewMainHandler(
 	taskService adapters.TaskService,
 	accountService adapters.AccountService,
 	authService adapters.AuthService,

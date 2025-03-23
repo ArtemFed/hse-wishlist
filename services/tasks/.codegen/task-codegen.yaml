@@ -172,6 +172,12 @@ paths:
                 $ref: '#/components/schemas/JwtToken'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     TaskGet:
       type: object
@@ -337,3 +343,7 @@ components:
           type: string
       required:
         - id
+
+#  Apply the security globally to all operations
+security:
+  - bearerAuth: [ ]

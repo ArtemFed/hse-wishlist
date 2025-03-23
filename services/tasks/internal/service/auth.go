@@ -50,7 +50,7 @@ func (a *authService) Login(ctx context.Context, params domain.AccountAuth) (str
 		return "", errors.New("credentials are incorrect")
 	}
 
-	token, err := a.generateToken(list[0])
+	token, err := a.GenerateToken(list[0])
 	if err != nil {
 		return "", err
 	}
