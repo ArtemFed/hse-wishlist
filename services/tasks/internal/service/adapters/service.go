@@ -27,4 +27,6 @@ type AccountService interface {
 
 type AuthService interface {
 	Login(ctx context.Context, params domain.AccountAuth) (string, error)
+	ParseToken(accessToken string) (uuid.UUID, error)
+	GenerateToken(account domain.AccountGet) (string, error)
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/domain"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
@@ -46,10 +47,10 @@ func (a *authService) Login(ctx context.Context, params domain.AccountAuth) (str
 	}
 
 	if len(list) == 0 || !verifyUserPass(list[0], params.Password) {
-		return "", fmt.Errorf("credentials are incorrect")
+		return "", errors.New("credentials are incorrect")
 	}
 
-	token, err := generateToken(list[0])
+	token, err := a.generateToken(list[0])
 	if err != nil {
 		return "", err
 	}
@@ -57,7 +58,26 @@ func (a *authService) Login(ctx context.Context, params domain.AccountAuth) (str
 	return token, nil
 }
 
-func generateToken(account domain.AccountGet) (string, error) {
+func (a *authService) ParseToken(accessToken string) (uuid.UUID, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing method")
+		}
+
+		return []byte(signingKey), nil
+	})
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
+		return uuid.UUID{}, errors.New("token claims are not of type")
+	}
+	return claims.AccountUUID, nil
+}
+
+func (a *authService) GenerateToken(account domain.AccountGet) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(30 * time.Minute).Unix(),
