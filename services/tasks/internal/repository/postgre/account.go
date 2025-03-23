@@ -17,7 +17,7 @@ const (
 )
 
 const (
-	baseAccountGetQuery = `SELECT uuid, login, created_at, updated_at FROM accounts`
+	baseAccountGetQuery = `SELECT uuid, login, password, created_at, updated_at FROM accounts`
 	createAccountQuery  = `INSERT INTO accounts (login, password) VALUES ($1, $2) RETURNING uuid`
 	updateAccountQuery  = `UPDATE accounts SET login = $2, password = $3, updated_at = $4 WHERE uuid = $1`
 )

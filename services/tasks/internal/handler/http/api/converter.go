@@ -61,7 +61,9 @@ func AccountCreateToDomain(create AccountCreate) domain.AccountCreate {
 func AccountDomainToGet(get domain.AccountGet) AccountGet {
 	return AccountGet{
 		Id:        get.UUID,
+		Login:     get.Login,
 		CreatedAt: get.CreatedAt,
+		UpdatedAt: get.UpdateAt,
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 type AccountGet struct {
 	UUID      uuid.UUID
 	Login     string
+	Password  string
 	CreatedAt time.Time
 	UpdateAt  time.Time
 }

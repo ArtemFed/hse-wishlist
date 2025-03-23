@@ -102,7 +102,7 @@ func NewApp(cfg *config.Config) (*App, error) {
 	// Name layer
 	taskService := service.NewTaskService(taskRepo)
 	accountService := service.NewAccountService(accountRepo)
-	authService := service.NewAuthService()
+	authService := service.NewAuthService(accountService)
 
 	log.Logger.Info(fmt.Sprintf("Init %s – success", cfg.App.Name))
 

@@ -39,32 +39,26 @@ func (a *App) startHTTPServer(ctx context.Context) {
 
 	// Добавление маршрута для спецификации OpenAPI в формате JSON
 	router.Router().GET("/api/v1/swagger/swagger.json", func(c *gin.Context) {
-		// Определите путь к вашему файлу спецификации OpenAPI
 		yamlFilePath := "./services/tasks/.codegen/task-codegen.yaml"
 		if os.Getenv("SWAGGER_FILE_PATH") != "" {
 			yamlFilePath = os.Getenv("SWAGGER_FILE_PATH")
 		}
-
-		// Читаем содержимое файла спецификации
 		yamlContent, err := ioutil.ReadFile(yamlFilePath)
 		if err != nil {
 			c.JSON(nhttp.StatusInternalServerError, gin.H{"error": "Failed to read OpenAPI specification file"})
 			return
 		}
-
-		// Преобразуем YAML в JSON
 		jsonContent, err := yaml.YAMLToJSON(yamlContent)
 		if err != nil {
 			c.JSON(nhttp.StatusInternalServerError, gin.H{"error": "Failed to convert YAML to JSON"})
 			return
 		}
-
-		// Отправляем содержимое файла как ответ
 		c.Data(nhttp.StatusOK, "application/json", jsonContent)
 	})
 
 	// Добавление маршрутов для Swagger UI
-	router.Router().GET("/api/v1/swagger-ui/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/api/v1/swagger/swagger.json")))
+	router.Router().GET("/api/v1/swagger-ui/*any",
+		ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/api/v1/swagger/swagger.json")))
 
 	//router.Router().GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

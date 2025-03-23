@@ -37,6 +37,7 @@ func (s *accountService) Create(ctx context.Context, account domain.AccountCreat
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAccount, spanDefaultAccount, ".Create")
 	defer span.End()
 
+	account.Password = generatePasswordHash(account.Password)
 	id, err := s.r.Create(newCtx, account)
 	if err != nil {
 		return nil, err
@@ -49,6 +50,7 @@ func (s *accountService) Update(ctx context.Context, account domain.AccountUpdat
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAccount, spanDefaultAccount, ".Update")
 	defer span.End()
 
+	account.Password = generatePasswordHash(account.Password)
 	err := s.r.Update(newCtx, account)
 	if err != nil {
 		return err

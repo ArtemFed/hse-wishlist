@@ -37,6 +37,7 @@ func ToAccountDomain(model Account) domain.AccountGet {
 	return domain.AccountGet{
 		UUID:      model.UUID,
 		Login:     model.Login,
+		Password:  model.Password,
 		CreatedAt: model.CreatedAt,
 		UpdateAt:  model.UpdatedAt,
 	}
