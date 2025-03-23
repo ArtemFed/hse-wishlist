@@ -6,7 +6,7 @@ HSE course project for Industrial Software Engineering
 ## Тестовый прогон кубера
 
 kubectl create deployment k8s-hse-wishlist --image=kicbase/echo-server:1.0
-kubectl expose deployment k8s-hse-wishlist --type=LoadBalancer --port=8080
+kubectl expose deployment k8s-hse-wishlist --type=LoadBalancer --port=8082
 kubectl get service
 
 ## Запуск в кубере

@@ -21,6 +21,7 @@ USER appuser
 COPY --from=build /app/tasks-svc ./
 
 COPY --from=build /app/${ENV_FILE} ./services/tasks/.env
+COPY --from=build /app/services/tasks/.codegen ./services/tasks/.codegen
 COPY --from=build /app/services/tasks/migrations ./services/tasks/migrations
 COPY --from=build /app/services/tasks/config/config.docker.yml ./services/tasks/config/config.local.yml
 

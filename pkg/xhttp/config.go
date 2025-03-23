@@ -6,7 +6,7 @@ import (
 
 const (
 	defaultHost         = "localhost"
-	defaultPort         = "8080"
+	defaultPort         = "8082"
 	defaultReadTimeout  = time.Second
 	defaultWriteTimeout = time.Second
 )
