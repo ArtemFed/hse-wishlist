@@ -7,13 +7,24 @@ import (
 )
 
 const (
-	ServiceNameTask = "task-service"
+	ServiceTask    = "task-service"
+	ServiceAccount = "account-service"
+	ServiceAuth    = "auth-service"
 )
 
 type TaskService interface {
-	Get(ctx context.Context, id uuid.UUID) (*domain.TaskGet, error)
 	List(ctx context.Context, filter *domain.TaskFilter) ([]domain.TaskGet, error)
-	EndTask(ctx context.Context, id uuid.UUID) error
+	Patch(ctx context.Context, id uuid.UUID, status string) error
 	Create(ctx context.Context, task *domain.TaskCreate) (*uuid.UUID, error)
 	Update(ctx context.Context, task *domain.TaskUpdate) error
+}
+
+type AccountService interface {
+	List(ctx context.Context, filter *domain.AccountFilter) ([]domain.AccountGet, error)
+	Create(ctx context.Context, task *domain.AccountCreate) (*uuid.UUID, error)
+	Update(ctx context.Context, task *domain.AccountUpdate) error
+}
+
+type AuthService interface {
+	Login(ctx context.Context, params *domain.AccountAuth) (string, error)
 }

@@ -5,15 +5,20 @@ import (
 	"strings"
 )
 
-func QueryWhereAnd(selectQuery string, argsMap map[string]any) (string, []any) {
+type FilterItem struct {
+	Value    any
+	Operator string
+}
+
+func QueryWhereAnd(selectQuery string, argsMap map[string]FilterItem) (string, []any) {
 	return queryWhere(selectQuery, argsMap, "AND")
 }
 
-func QueryWhereOr(selectQuery string, argsMap map[string]any) (string, []any) {
+func QueryWhereOr(selectQuery string, argsMap map[string]FilterItem) (string, []any) {
 	return queryWhere(selectQuery, argsMap, "OR")
 }
 
-func queryWhere(selectQuery string, argsMap map[string]any, argsConnector string) (string, []any) {
+func queryWhere(selectQuery string, argsMap map[string]FilterItem, argsConnector string) (string, []any) {
 	var sb strings.Builder
 	sb.WriteString(selectQuery)
 	if len(argsMap) > 0 {
@@ -26,8 +31,8 @@ func queryWhere(selectQuery string, argsMap map[string]any, argsConnector string
 		if i == 1 {
 			connector = fmt.Sprintf(" %s ", argsConnector)
 		}
-		sb.WriteString(fmt.Sprintf("%s %v = $%d", connector, k, i+1))
-		args[i] = v
+		sb.WriteString(fmt.Sprintf("%s %v %s $%d", connector, k, v.Operator, i+1))
+		args[i] = v.Value
 		i++
 	}
 	return sb.String(), args

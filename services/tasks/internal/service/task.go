@@ -6,8 +6,6 @@ import (
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/domain"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
 	"github.com/google/uuid"
-	global "go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/trace"
 )
 
 const (
@@ -22,12 +20,6 @@ type taskService struct {
 
 func NewTaskService(taskRepository adapters.TaskRepository) adapters.TaskService {
 	return &taskService{r: taskRepository}
-}
-
-func getTaskTracerSpan(ctx context.Context, name string) (trace.Tracer, context.Context, trace.Span) {
-	tr := global.Tracer(adapters.ServiceNameTask)
-	newCtx, span := tr.Start(ctx, spanDefaultTask+name)
-	return tr, newCtx, span
 }
 
 func (s *taskService) Get(ctx context.Context, id uuid.UUID) (*domain.TaskGet, error) {

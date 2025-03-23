@@ -36,11 +36,11 @@ type TaskUpdate struct {
 }
 
 type TaskFilter struct {
-	UUID               *uuid.UUID
-	CreatedBy          *uuid.UUID
-	Status             *string
-	StartedAtLeftBound *time.Time
-	StartedAtRightAt   *time.Time
-	EndedAtLeftBound   *time.Time
-	EndedAtRightAt     *time.Time
+	UUID                *uuid.UUID
+	CreatedBy           *uuid.UUID
+	Status              *string
+	StartedAtLeftBound  *time.Time
+	StartedAtRightBound *time.Time
+	EndedAtLeftBound    *time.Time
+	EndedAtRightBound   *time.Time
 }

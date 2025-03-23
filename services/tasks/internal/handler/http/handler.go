@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/config"
-	task "github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/task"
+	task "github.com/ArtemFed/hse-wishlist/services/tasks/internal/handler/http/api"
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/service/adapters"
 	"strings"
 

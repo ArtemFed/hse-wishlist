@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	global "go.opentelemetry.io/otel"
-	"time"
 )
 
 const (
@@ -22,8 +21,8 @@ const (
 		FROM tasks
 	`
 	createTaskQuery = `
-		INSERT INTO tasks (name, text, status)
-		VALUES ($1, $2, $3)
+		INSERT INTO tasks (name, text, status, started_at, ended_at)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING uuid
 	`
 	updateTaskQuery = `
@@ -31,13 +30,15 @@ const (
 		SET 
 		    name = $2,
 		    text = $3,
-		    status = $4
+		    status = $4,
+		    started_at = $5,
+		    ended_at = $6,
 		WHERE uuid = $1;
 	`
-	finishTaskQuery = `
+	patchStatusTaskQuery = `
 		UPDATE tasks
 		SET 
-		    ended_at = $2
+		    status = $2,
 		WHERE uuid = $1;
 	`
 )
@@ -52,20 +53,8 @@ func NewTaskRepository(db *sqlx.DB) adapters.TaskRepository {
 	return &taskRepository{db: db}
 }
 
-func (r *taskRepository) Get(ctx context.Context, id uuid.UUID) (*domain.TaskGet, error) {
-	tr := global.Tracer(adapters.ServiceNameTask)
-	_, span := tr.Start(ctx, spanDefaultTask+".GetByLogin")
-	defer span.End()
-
-	tasks, err := r.List(ctx, &domain.TaskFilter{UUID: &id})
-	if err != nil {
-		return nil, err
-	}
-	return xcommon.EnsureSingle(tasks)
-}
-
 func (r *taskRepository) List(ctx context.Context, filter *domain.TaskFilter) ([]domain.TaskGet, error) {
-	tr := global.Tracer(adapters.ServiceNameTask)
+	tr := global.Tracer(adapters.ServiceTask)
 	_, span := tr.Start(ctx, spanDefaultTask+".List")
 	defer span.End()
 
@@ -80,18 +69,19 @@ func (r *taskRepository) List(ctx context.Context, filter *domain.TaskFilter) ([
 }
 
 func (r *taskRepository) Create(ctx context.Context, task *domain.TaskCreate) (*uuid.UUID, error) {
-	tr := global.Tracer(adapters.ServiceNameTask)
+	tr := global.Tracer(adapters.ServiceTask)
 	_, span := tr.Start(ctx, spanDefaultTask+".Create")
 	defer span.End()
 
 	taskPostgres := repo_models.CreateToTaskPostgres(task)
 	row := r.db.QueryRow(
 		createTaskQuery,
+		taskPostgres.Name,
+		taskPostgres.Text,
+		taskPostgres.Status,
 		taskPostgres.CreatedBy,
-		taskPostgres.Percent,
 		taskPostgres.StartedAt,
 		taskPostgres.EndedAt,
-		taskPostgres.Status,
 	)
 
 	var id uuid.UUID
@@ -108,41 +98,51 @@ func (r *taskRepository) Update(ctx context.Context, task *domain.TaskUpdate) er
 		ctx,
 		updateTaskQuery,
 		taskPostgres.UUID,
+		taskPostgres.Name,
+		taskPostgres.Text,
+		taskPostgres.Status,
 		taskPostgres.CreatedBy,
-		taskPostgres.Percent,
 		taskPostgres.StartedAt,
 		taskPostgres.EndedAt,
-		taskPostgres.Status,
 	)
 	return err
 }
 
-func (r *taskRepository) EndTask(ctx context.Context, id uuid.UUID) error {
+func (r *taskRepository) PatchStatus(ctx context.Context, id uuid.UUID, status string) error {
 	_, err := r.db.ExecContext(
 		ctx,
-		finishTaskQuery,
+		patchStatusTaskQuery,
 		id,
-		time.Now(),
+		status,
 	)
 	return err
 }
 
-func mapGetTaskRequestParams(params *domain.TaskFilter) map[string]interface{} {
+func mapGetTaskRequestParams(params *domain.TaskFilter) map[string]xcommon.FilterItem {
 	if params == nil {
-		return map[string]any{}
+		return map[string]xcommon.FilterItem{}
 	}
-	paramsMap := make(map[string]interface{})
+	paramsMap := make(map[string]xcommon.FilterItem)
 	if params.UUID != nil {
-		paramsMap["uuid"] = *params.UUID
+		paramsMap["uuid"] = xcommon.FilterItem{Value: *params.UUID, Operator: "="}
 	}
 	if params.CreatedBy != nil {
-		paramsMap["created_by"] = *params.CreatedBy
-	}
-	if params.Percent != nil {
-		paramsMap["percent"] = *params.Percent
+		paramsMap["created_by"] = xcommon.FilterItem{Value: *params.CreatedBy, Operator: "="}
 	}
 	if params.Status != nil {
-		paramsMap["status"] = *params.Status
+		paramsMap["status"] = xcommon.FilterItem{Value: *params.Status, Operator: "="}
+	}
+	if params.StartedAtLeftBound != nil {
+		paramsMap["started_at"] = xcommon.FilterItem{Value: *params.StartedAtLeftBound, Operator: ">"}
+	}
+	if params.StartedAtRightBound != nil {
+		paramsMap["started_at"] = xcommon.FilterItem{Value: *params.StartedAtRightBound, Operator: "<"}
+	}
+	if params.EndedAtLeftBound != nil {
+		paramsMap["ended_at"] = xcommon.FilterItem{Value: *params.EndedAtLeftBound, Operator: ">"}
+	}
+	if params.EndedAtRightBound != nil {
+		paramsMap["ended_at"] = xcommon.FilterItem{Value: *params.EndedAtRightBound, Operator: "<"}
 	}
 	return paramsMap
 }

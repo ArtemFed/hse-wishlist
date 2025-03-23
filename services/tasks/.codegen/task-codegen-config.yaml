@@ -1,7 +1,7 @@
 # task-codegen-config.yaml for task api + server
 
-output: internal/handler/http/task/task_gen.go
-package: task
+output: internal/handler/http/api/api_gen.go
+package: api
 generate:
   - types
   - gin-server

@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelUUID'
+                $ref: '#/components/schemas/JwtToken'
 
 components:
   schemas:
@@ -289,7 +289,6 @@ components:
       properties:
         login:
           type: string
-          format: uuid
         password:
           type: string
       required:
@@ -304,7 +303,6 @@ components:
           format: uuid
         login:
           type: string
-          format: uuid
         password:
           type: string
       required:
@@ -317,7 +315,6 @@ components:
       properties:
         login:
           type: string
-          format: uuid
         password:
           type: string
       required:
