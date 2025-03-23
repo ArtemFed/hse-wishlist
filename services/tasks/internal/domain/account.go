@@ -24,7 +24,8 @@ type AccountUpdate struct {
 }
 
 type AccountFilter struct {
-	UUID *uuid.UUID
+	UUID  *uuid.UUID
+	Login *string
 }
 
 type AccountAuth struct {

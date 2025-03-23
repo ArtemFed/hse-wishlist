@@ -83,13 +83,13 @@ type TaskUpdate struct {
 	Text      string             `json:"text"`
 }
 
-// GetApiV1AccountsParams defines parameters for GetApiV1Accounts.
-type GetApiV1AccountsParams struct {
+// GetAccountsParams defines parameters for GetAccounts.
+type GetAccountsParams struct {
 	Id *openapi_types.UUID `form:"id,omitempty" json:"id,omitempty"`
 }
 
-// GetApiV1TasksParams defines parameters for GetApiV1Tasks.
-type GetApiV1TasksParams struct {
+// GetTasksParams defines parameters for GetTasks.
+type GetTasksParams struct {
 	Id          *openapi_types.UUID `form:"id,omitempty" json:"id,omitempty"`
 	CreatedBy   *openapi_types.UUID `form:"createdBy,omitempty" json:"createdBy,omitempty"`
 	Status      *string             `form:"status,omitempty" json:"status,omitempty"`
@@ -99,53 +99,53 @@ type GetApiV1TasksParams struct {
 	EndedAtRB   *time.Time          `form:"endedAtRB,omitempty" json:"endedAtRB,omitempty"`
 }
 
-// PatchApiV1TasksParams defines parameters for PatchApiV1Tasks.
-type PatchApiV1TasksParams struct {
+// PatchTasksParams defines parameters for PatchTasks.
+type PatchTasksParams struct {
 	Id     openapi_types.UUID `form:"id" json:"id"`
 	Status string             `form:"status" json:"status"`
 }
 
-// PostApiV1AccountsJSONRequestBody defines body for PostApiV1Accounts for application/json ContentType.
-type PostApiV1AccountsJSONRequestBody = AccountCreate
+// PostAccountsJSONRequestBody defines body for PostAccounts for application/json ContentType.
+type PostAccountsJSONRequestBody = AccountCreate
 
-// PutApiV1AccountsJSONRequestBody defines body for PutApiV1Accounts for application/json ContentType.
-type PutApiV1AccountsJSONRequestBody = AccountUpdate
+// PutAccountsJSONRequestBody defines body for PutAccounts for application/json ContentType.
+type PutAccountsJSONRequestBody = AccountUpdate
 
-// PostApiV1AuthJSONRequestBody defines body for PostApiV1Auth for application/json ContentType.
-type PostApiV1AuthJSONRequestBody = AccountAuth
+// PostAuthJSONRequestBody defines body for PostAuth for application/json ContentType.
+type PostAuthJSONRequestBody = AccountAuth
 
-// PostApiV1TasksJSONRequestBody defines body for PostApiV1Tasks for application/json ContentType.
-type PostApiV1TasksJSONRequestBody = TaskCreate
+// PostTasksJSONRequestBody defines body for PostTasks for application/json ContentType.
+type PostTasksJSONRequestBody = TaskCreate
 
-// PutApiV1TasksJSONRequestBody defines body for PutApiV1Tasks for application/json ContentType.
-type PutApiV1TasksJSONRequestBody = TaskUpdate
+// PutTasksJSONRequestBody defines body for PutTasks for application/json ContentType.
+type PutTasksJSONRequestBody = TaskUpdate
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// List Accounts
-	// (GET /api/v1/accounts)
-	GetApiV1Accounts(c *gin.Context, params GetApiV1AccountsParams)
+	// (GET /accounts)
+	GetAccounts(c *gin.Context, params GetAccountsParams)
 	// Create an Accounts
-	// (POST /api/v1/accounts)
-	PostApiV1Accounts(c *gin.Context)
+	// (POST /accounts)
+	PostAccounts(c *gin.Context)
 	// Update account
-	// (PUT /api/v1/accounts)
-	PutApiV1Accounts(c *gin.Context)
+	// (PUT /accounts)
+	PutAccounts(c *gin.Context)
 	// Login
-	// (POST /api/v1/auth)
-	PostApiV1Auth(c *gin.Context)
+	// (POST /auth)
+	PostAuth(c *gin.Context)
 	// List tasks
-	// (GET /api/v1/tasks)
-	GetApiV1Tasks(c *gin.Context, params GetApiV1TasksParams)
+	// (GET /tasks)
+	GetTasks(c *gin.Context, params GetTasksParams)
 	// Change task status
-	// (PATCH /api/v1/tasks)
-	PatchApiV1Tasks(c *gin.Context, params PatchApiV1TasksParams)
+	// (PATCH /tasks)
+	PatchTasks(c *gin.Context, params PatchTasksParams)
 	// Create a task
-	// (POST /api/v1/tasks)
-	PostApiV1Tasks(c *gin.Context)
+	// (POST /tasks)
+	PostTasks(c *gin.Context)
 	// Update a task
-	// (PUT /api/v1/tasks)
-	PutApiV1Tasks(c *gin.Context)
+	// (PUT /tasks)
+	PutTasks(c *gin.Context)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -157,13 +157,13 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(c *gin.Context)
 
-// GetApiV1Accounts operation middleware
-func (siw *ServerInterfaceWrapper) GetApiV1Accounts(c *gin.Context) {
+// GetAccounts operation middleware
+func (siw *ServerInterfaceWrapper) GetAccounts(c *gin.Context) {
 
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params GetApiV1AccountsParams
+	var params GetAccountsParams
 
 	// ------------- Optional query parameter "id" -------------
 
@@ -180,11 +180,11 @@ func (siw *ServerInterfaceWrapper) GetApiV1Accounts(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetApiV1Accounts(c, params)
+	siw.Handler.GetAccounts(c, params)
 }
 
-// PostApiV1Accounts operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1Accounts(c *gin.Context) {
+// PostAccounts operation middleware
+func (siw *ServerInterfaceWrapper) PostAccounts(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -193,11 +193,11 @@ func (siw *ServerInterfaceWrapper) PostApiV1Accounts(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostApiV1Accounts(c)
+	siw.Handler.PostAccounts(c)
 }
 
-// PutApiV1Accounts operation middleware
-func (siw *ServerInterfaceWrapper) PutApiV1Accounts(c *gin.Context) {
+// PutAccounts operation middleware
+func (siw *ServerInterfaceWrapper) PutAccounts(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -206,11 +206,11 @@ func (siw *ServerInterfaceWrapper) PutApiV1Accounts(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PutApiV1Accounts(c)
+	siw.Handler.PutAccounts(c)
 }
 
-// PostApiV1Auth operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1Auth(c *gin.Context) {
+// PostAuth operation middleware
+func (siw *ServerInterfaceWrapper) PostAuth(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -219,16 +219,16 @@ func (siw *ServerInterfaceWrapper) PostApiV1Auth(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostApiV1Auth(c)
+	siw.Handler.PostAuth(c)
 }
 
-// GetApiV1Tasks operation middleware
-func (siw *ServerInterfaceWrapper) GetApiV1Tasks(c *gin.Context) {
+// GetTasks operation middleware
+func (siw *ServerInterfaceWrapper) GetTasks(c *gin.Context) {
 
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params GetApiV1TasksParams
+	var params GetTasksParams
 
 	// ------------- Optional query parameter "id" -------------
 
@@ -293,16 +293,16 @@ func (siw *ServerInterfaceWrapper) GetApiV1Tasks(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetApiV1Tasks(c, params)
+	siw.Handler.GetTasks(c, params)
 }
 
-// PatchApiV1Tasks operation middleware
-func (siw *ServerInterfaceWrapper) PatchApiV1Tasks(c *gin.Context) {
+// PatchTasks operation middleware
+func (siw *ServerInterfaceWrapper) PatchTasks(c *gin.Context) {
 
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params PatchApiV1TasksParams
+	var params PatchTasksParams
 
 	// ------------- Required query parameter "id" -------------
 
@@ -341,11 +341,11 @@ func (siw *ServerInterfaceWrapper) PatchApiV1Tasks(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PatchApiV1Tasks(c, params)
+	siw.Handler.PatchTasks(c, params)
 }
 
-// PostApiV1Tasks operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1Tasks(c *gin.Context) {
+// PostTasks operation middleware
+func (siw *ServerInterfaceWrapper) PostTasks(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -354,11 +354,11 @@ func (siw *ServerInterfaceWrapper) PostApiV1Tasks(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostApiV1Tasks(c)
+	siw.Handler.PostTasks(c)
 }
 
-// PutApiV1Tasks operation middleware
-func (siw *ServerInterfaceWrapper) PutApiV1Tasks(c *gin.Context) {
+// PutTasks operation middleware
+func (siw *ServerInterfaceWrapper) PutTasks(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -367,7 +367,7 @@ func (siw *ServerInterfaceWrapper) PutApiV1Tasks(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PutApiV1Tasks(c)
+	siw.Handler.PutTasks(c)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -397,12 +397,12 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 		ErrorHandler:       errorHandler,
 	}
 
-	router.GET(options.BaseURL+"/api/v1/accounts", wrapper.GetApiV1Accounts)
-	router.POST(options.BaseURL+"/api/v1/accounts", wrapper.PostApiV1Accounts)
-	router.PUT(options.BaseURL+"/api/v1/accounts", wrapper.PutApiV1Accounts)
-	router.POST(options.BaseURL+"/api/v1/auth", wrapper.PostApiV1Auth)
-	router.GET(options.BaseURL+"/api/v1/tasks", wrapper.GetApiV1Tasks)
-	router.PATCH(options.BaseURL+"/api/v1/tasks", wrapper.PatchApiV1Tasks)
-	router.POST(options.BaseURL+"/api/v1/tasks", wrapper.PostApiV1Tasks)
-	router.PUT(options.BaseURL+"/api/v1/tasks", wrapper.PutApiV1Tasks)
+	router.GET(options.BaseURL+"/accounts", wrapper.GetAccounts)
+	router.POST(options.BaseURL+"/accounts", wrapper.PostAccounts)
+	router.PUT(options.BaseURL+"/accounts", wrapper.PutAccounts)
+	router.POST(options.BaseURL+"/auth", wrapper.PostAuth)
+	router.GET(options.BaseURL+"/tasks", wrapper.GetTasks)
+	router.PATCH(options.BaseURL+"/tasks", wrapper.PatchTasks)
+	router.POST(options.BaseURL+"/tasks", wrapper.PostTasks)
+	router.PUT(options.BaseURL+"/tasks", wrapper.PutTasks)
 }

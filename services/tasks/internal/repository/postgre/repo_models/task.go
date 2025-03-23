@@ -20,7 +20,7 @@ type Task struct {
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
-func CreateToTaskPostgres(model *domain.TaskCreate) *Task {
+func CreateToTaskPostgres(model domain.TaskCreate) *Task {
 	id, _ := uuid.NewUUID()
 	return &Task{
 		UUID:      id,
@@ -35,7 +35,7 @@ func CreateToTaskPostgres(model *domain.TaskCreate) *Task {
 	}
 }
 
-func UpdateToTaskPostgres(model *domain.TaskUpdate) *Task {
+func UpdateToTaskPostgres(model domain.TaskUpdate) *Task {
 	return &Task{
 		UUID:      model.UUID,
 		Name:      model.Name,
@@ -47,8 +47,8 @@ func UpdateToTaskPostgres(model *domain.TaskUpdate) *Task {
 	}
 }
 
-func ToTaskDomain(model *Task) *domain.TaskGet {
-	return &domain.TaskGet{
+func ToTaskDomain(model Task) domain.TaskGet {
+	return domain.TaskGet{
 		UUID:      model.UUID,
 		Name:      model.Name,
 		Text:      model.Text,

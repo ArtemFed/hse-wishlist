@@ -1,7 +1,7 @@
 apiVersion: "1.0.0"
 
 app:
-  name: "tasks"
+  name: "hse"
   env: "dev"
   version: "1.0"
 
@@ -40,11 +40,5 @@ http:
   write_timeout: "15s"
 
 tracer:
-  enable: false
+  enable: true
   exp_target: "host.docker.internal:4317"
-
-payments_client:
-  uri: "http://payments-svc:8088/api/v1"
-
-banker:
-  interval: 10s

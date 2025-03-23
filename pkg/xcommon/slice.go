@@ -20,10 +20,10 @@ func ConvertSlice[F any, T any](sl []F, converter func(item F) T) []T {
 	return newSl
 }
 
-func ConvertSliceP[F any, T any](sl []F, converter func(item *F) *T) []T {
+func ConvertSliceP[F any, T any](sl []F, converter func(item F) T) []T {
 	newSl := make([]T, len(sl))
 	for i, v := range sl {
-		newSl[i] = *converter(&v)
+		newSl[i] = converter(v)
 	}
 	return newSl
 }

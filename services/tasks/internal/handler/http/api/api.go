@@ -26,7 +26,7 @@ func NewTaskHandler(taskService adapters.TaskService) *Handler {
 	return &Handler{taskService: taskService}
 }
 
-func (h *Handler) GetApiV1Accounts(ctx *gin.Context, params GetApiV1AccountsParams) {
+func (h *Handler) GetAccounts(ctx *gin.Context, params GetAccountsParams) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAccount, spanDefaultAccount, ".Get")
 	defer span.End()
 
@@ -44,7 +44,7 @@ func (h *Handler) GetApiV1Accounts(ctx *gin.Context, params GetApiV1AccountsPara
 	ctx.JSON(http.StatusOK, list)
 }
 
-func (h *Handler) PostApiV1Accounts(ctx *gin.Context) {
+func (h *Handler) PostAccounts(ctx *gin.Context) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAccount, spanDefaultAccount, ".Create")
 	defer span.End()
 
@@ -55,7 +55,7 @@ func (h *Handler) PostApiV1Accounts(ctx *gin.Context) {
 	}
 
 	model := AccountCreateToDomain(body)
-	id, err := h.accountService.Create(newCtx, &model)
+	id, err := h.accountService.Create(newCtx, model)
 	if err != nil {
 		http2.AbortWithBadResponse(ctx, http2.MapErrorToCode(err), err)
 		return
@@ -64,7 +64,7 @@ func (h *Handler) PostApiV1Accounts(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ModelUUID{Id: *id})
 }
 
-func (h *Handler) PutApiV1Accounts(ctx *gin.Context) {
+func (h *Handler) PutAccounts(ctx *gin.Context) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAccount, spanDefaultAccount, ".Update")
 	defer span.End()
 
@@ -75,7 +75,7 @@ func (h *Handler) PutApiV1Accounts(ctx *gin.Context) {
 	}
 
 	model := AccountUpdateToDomain(body)
-	err := h.accountService.Update(newCtx, &model)
+	err := h.accountService.Update(newCtx, model)
 	if err != nil {
 		http2.AbortWithBadResponse(ctx, http2.MapErrorToCode(err), err)
 		return
@@ -84,7 +84,7 @@ func (h *Handler) PutApiV1Accounts(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, http.NoBody)
 }
 
-func (h *Handler) PostApiV1Auth(ctx *gin.Context) {
+func (h *Handler) PostAuth(ctx *gin.Context) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceAuth, spanDefaultAuth, ".Login")
 	defer span.End()
 
@@ -95,7 +95,7 @@ func (h *Handler) PostApiV1Auth(ctx *gin.Context) {
 	}
 
 	model := AccountAuthToDomain(body)
-	token, err := h.authService.Login(newCtx, &model)
+	token, err := h.authService.Login(newCtx, model)
 	if err != nil {
 		http2.AbortWithBadResponse(ctx, http2.MapErrorToCode(err), err)
 		return
@@ -104,7 +104,7 @@ func (h *Handler) PostApiV1Auth(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, JwtToken{Token: &token})
 }
 
-func (h *Handler) GetApiV1Tasks(ctx *gin.Context, params GetApiV1TasksParams) {
+func (h *Handler) GetTasks(ctx *gin.Context, params GetTasksParams) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Get")
 	defer span.End()
 
@@ -122,7 +122,7 @@ func (h *Handler) GetApiV1Tasks(ctx *gin.Context, params GetApiV1TasksParams) {
 	ctx.JSON(http.StatusOK, list)
 }
 
-func (h *Handler) PatchApiV1Tasks(ctx *gin.Context, params PatchApiV1TasksParams) {
+func (h *Handler) PatchTasks(ctx *gin.Context, params PatchTasksParams) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Patch")
 	defer span.End()
 
@@ -135,7 +135,7 @@ func (h *Handler) PatchApiV1Tasks(ctx *gin.Context, params PatchApiV1TasksParams
 	ctx.JSON(http.StatusOK, http.NoBody)
 }
 
-func (h *Handler) PostApiV1Tasks(ctx *gin.Context) {
+func (h *Handler) PostTasks(ctx *gin.Context) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Create")
 	defer span.End()
 
@@ -146,7 +146,7 @@ func (h *Handler) PostApiV1Tasks(ctx *gin.Context) {
 	}
 
 	model := TaskCreateToDomain(body)
-	id, err := h.taskService.Create(newCtx, &model)
+	id, err := h.taskService.Create(newCtx, model)
 	if err != nil {
 		http2.AbortWithBadResponse(ctx, http2.MapErrorToCode(err), err)
 		return
@@ -155,7 +155,7 @@ func (h *Handler) PostApiV1Tasks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ModelUUID{Id: *id})
 }
 
-func (h *Handler) PutApiV1Tasks(ctx *gin.Context) {
+func (h *Handler) PutTasks(ctx *gin.Context) {
 	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Update")
 	defer span.End()
 
@@ -166,7 +166,7 @@ func (h *Handler) PutApiV1Tasks(ctx *gin.Context) {
 	}
 
 	model := TaskUpdateToDomain(body)
-	err := h.taskService.Update(newCtx, &model)
+	err := h.taskService.Update(newCtx, model)
 	if err != nil {
 		http2.AbortWithBadResponse(ctx, http2.MapErrorToCode(err), err)
 		return

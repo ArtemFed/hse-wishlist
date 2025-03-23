@@ -9,6 +9,7 @@ import (
 	"github.com/ArtemFed/hse-wishlist/services/tasks/internal/log"
 	ginzap "github.com/gin-contrib/zap"
 	requestid "github.com/sumit-tembe/gin-requestid"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"time"
 )
 
@@ -28,16 +29,14 @@ func (a *App) startHTTPServer(ctx context.Context) {
 	// Создаем общий роутинг http сервера
 	router := xhttp.NewRouter()
 
-	//tracerMw := http.MiddlewareFunc(otelgin.Middleware(a.cfg.App.Name, otelgin.WithTracerProvider(a.tracerProvider)))
-	GinZapMw := http.MiddlewareFunc(ginzap.Ginzap(log.Logger, time.RFC3339, true))
-	requestIdMw := http.MiddlewareFunc(requestid.RequestID(nil))
-	middlewares := []http.MiddlewareFunc{
-		//tracerMw,
-		GinZapMw,
-		requestIdMw,
+	var middlewares []http.MiddlewareFunc
+	if a.cfg.Tracer.Enable {
+		middlewares = append(middlewares, http.MiddlewareFunc(otelgin.Middleware(a.cfg.App.Name, otelgin.WithTracerProvider(a.tracerProvider))))
 	}
+	middlewares = append(middlewares, http.MiddlewareFunc(ginzap.Ginzap(log.Logger, time.RFC3339, true)))
+	middlewares = append(middlewares, http.MiddlewareFunc(requestid.RequestID(nil)))
 
-	http.InitHandler(a.handler, router.Router(), middlewares, "tasks")
+	http.InitHandler(a.handler, router.Router(), middlewares, "hse")
 
 	srv := xhttp.NewServer(a.cfg.Http, router)
 

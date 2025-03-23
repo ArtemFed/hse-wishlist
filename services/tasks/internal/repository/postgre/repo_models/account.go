@@ -14,7 +14,7 @@ type Account struct {
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
-func CreateToAccountPostgres(model *domain.AccountCreate) *Account {
+func CreateToAccountPostgres(model domain.AccountCreate) *Account {
 	id, _ := uuid.NewUUID()
 	return &Account{
 		UUID:      id,
@@ -25,7 +25,7 @@ func CreateToAccountPostgres(model *domain.AccountCreate) *Account {
 	}
 }
 
-func UpdateToAccountPostgres(model *domain.AccountUpdate) *Account {
+func UpdateToAccountPostgres(model domain.AccountUpdate) *Account {
 	return &Account{
 		UUID:     model.UUID,
 		Login:    model.Login,
@@ -33,8 +33,8 @@ func UpdateToAccountPostgres(model *domain.AccountUpdate) *Account {
 	}
 }
 
-func ToAccountDomain(model *Account) *domain.AccountGet {
-	return &domain.AccountGet{
+func ToAccountDomain(model Account) domain.AccountGet {
+	return domain.AccountGet{
 		UUID:      model.UUID,
 		Login:     model.Login,
 		CreatedAt: model.CreatedAt,

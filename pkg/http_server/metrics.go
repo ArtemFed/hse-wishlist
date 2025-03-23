@@ -9,7 +9,7 @@ const metricNameSpace = "http_server"
 func newMetrics() *metrics {
 	req := metricslib.GetOrRegisterCounterVec(metricslib.CounterOpts{
 		Namespace:   metricNameSpace,
-		Name:        "taxi_http_server_requests_count",
+		Name:        "hse_http_server_requests_count",
 		Description: "Counter of requests received by HTTP server",
 	}, []string{"method", "http_code", "route"})
 

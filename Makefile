@@ -9,21 +9,21 @@ up:
 	docker compose --file ./docker-compose.yml --env-file ./.env up -d --build --wait
 
 up-all:
-	docker-compose -f ./deployments/compose.yaml up -d --build
+	docker compose -f ./deployments/compose.yaml up -d --build
 	docker compose --file ./docker-compose.yml --env-file ./.env up -d --build --wait
 
 # Падения
 
 down:
-	docker-compose down tasks-svc
+	docker compose down tasks-svc
 
 # Observability
 
 up-obs:
-	docker-compose -f ./deployments/compose.yaml up -d --build
+	docker compose -f ./deployments/compose.yaml up -d --build
 
 down-obs:
-	docker-compose -f ./deployments/compose.yaml down
+	docker compose -f ./deployments/compose.yaml down
 
 # Миграции
 

@@ -39,8 +39,8 @@ func TaskUpdateToDomain(update TaskUpdate) domain.TaskUpdate {
 	}
 }
 
-func TaskFilterToDomain(params GetApiV1TasksParams) *domain.TaskFilter {
-	return &domain.TaskFilter{
+func TaskFilterToDomain(params GetTasksParams) domain.TaskFilter {
+	return domain.TaskFilter{
 		UUID:                params.Id,
 		CreatedBy:           params.CreatedBy,
 		Status:              params.Status,
@@ -72,8 +72,8 @@ func AccountUpdateToDomain(update AccountUpdate) domain.AccountUpdate {
 	}
 }
 
-func AccountFilterToDomain(params GetApiV1AccountsParams) *domain.AccountFilter {
-	return &domain.AccountFilter{
+func AccountFilterToDomain(params GetAccountsParams) domain.AccountFilter {
+	return domain.AccountFilter{
 		UUID: params.Id,
 	}
 }

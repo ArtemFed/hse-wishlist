@@ -22,20 +22,8 @@ func NewTaskService(taskRepository adapters.TaskRepository) adapters.TaskService
 	return &taskService{r: taskRepository}
 }
 
-func (s *taskService) Get(ctx context.Context, id uuid.UUID) (*domain.TaskGet, error) {
-	_, newCtx, span := getTaskTracerSpan(ctx, ".GetByLogin")
-	defer span.End()
-
-	task, err := s.r.Get(newCtx, id)
-	if err != nil {
-		return nil, err
-	}
-
-	return task, nil
-}
-
-func (s *taskService) List(ctx context.Context, filter *domain.TaskFilter) ([]domain.TaskGet, error) {
-	_, newCtx, span := getTaskTracerSpan(ctx, ".List")
+func (s *taskService) List(ctx context.Context, filter domain.TaskFilter) ([]domain.TaskGet, error) {
+	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".List")
 	defer span.End()
 
 	tasks, err := s.r.List(newCtx, filter)
@@ -46,15 +34,15 @@ func (s *taskService) List(ctx context.Context, filter *domain.TaskFilter) ([]do
 	return tasks, nil
 }
 
-func (s *taskService) EndTask(ctx context.Context, id uuid.UUID) error {
-	_, newCtx, span := getTaskTracerSpan(ctx, ".EndTask")
+func (s *taskService) Patch(ctx context.Context, id uuid.UUID, status string) error {
+	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".EndTask")
 	defer span.End()
 
 	if id == uuid.Nil {
 		return errors.New("task ID cannot be nil")
 	}
 
-	err := s.r.EndTask(newCtx, id)
+	err := s.r.PatchStatus(newCtx, id, status)
 	if err != nil {
 		return err
 	}
@@ -62,8 +50,8 @@ func (s *taskService) EndTask(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (s *taskService) Create(ctx context.Context, task *domain.TaskCreate) (*uuid.UUID, error) {
-	_, newCtx, span := getTaskTracerSpan(ctx, ".Create")
+func (s *taskService) Create(ctx context.Context, task domain.TaskCreate) (*uuid.UUID, error) {
+	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Create")
 	defer span.End()
 
 	id, err := s.r.Create(newCtx, task)
@@ -74,8 +62,8 @@ func (s *taskService) Create(ctx context.Context, task *domain.TaskCreate) (*uui
 	return id, nil
 }
 
-func (s *taskService) Update(ctx context.Context, task *domain.TaskUpdate) error {
-	_, newCtx, span := getTaskTracerSpan(ctx, ".Update")
+func (s *taskService) Update(ctx context.Context, task domain.TaskUpdate) error {
+	_, newCtx, span := domain.GetTracerSpan(ctx, adapters.ServiceTask, spanDefaultTask, ".Update")
 	defer span.End()
 
 	err := s.r.Update(newCtx, task)
