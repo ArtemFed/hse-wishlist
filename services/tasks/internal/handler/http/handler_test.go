@@ -68,7 +68,7 @@ func TestHandler(t *testing.T) {
 	// Создаем моки сервисов
 	mockTaskService := new(MockTaskService)
 
-	id := uuid.New()
+	id := uuid.UUID{}
 	// Ожидаемые значения
 	expectedTasks := []domain.TaskGet{
 		{

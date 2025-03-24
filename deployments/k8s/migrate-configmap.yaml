@@ -65,7 +65,7 @@ data:
 
   000003_seed_admin_account.up.sql: |
     INSERT INTO accounts (login, password)
-    VALUES ('admin', 'admin');
+    VALUES ('admin', '68736532303235d033e22ae348aeb5660fc2140aec35850c4da997');
 
   000003_seed_admin_account.down.sql: |
     SELECT * from accounts;
