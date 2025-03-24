@@ -18,4 +18,6 @@ spec:
           image: jaegertracing/all-in-one:latest
           ports:
             - containerPort: 16686
+              name: jaeger-query
             - containerPort: 4317
+              name: otlp-grpc

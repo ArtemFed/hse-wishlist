@@ -14,11 +14,11 @@ spec:
     - protocol: TCP
       port: 8888
       targetPort: 8888
-      name: prometheus-metrics
+      name: prom-metrics
     - protocol: TCP
       port: 8889
       targetPort: 8889
-      name: exporter-metrics
+      name: exp-metrics
     - protocol: TCP
       port: 13133
       targetPort: 13133

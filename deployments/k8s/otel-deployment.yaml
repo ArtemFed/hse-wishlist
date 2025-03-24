@@ -17,14 +17,21 @@ spec:
         - name: otel-collector
           image: otel/opentelemetry-collector:latest
           command:
+            - "/usr/local/bin/otel-collector"
             - "--config=/etc/otel/otel-collector-config.yaml"
           ports:
             - containerPort: 1888
+              name: pprof
             - containerPort: 8888
+              name: prom-metrics
             - containerPort: 8889
+              name: exp-metrics
             - containerPort: 13133
+              name: health-check
             - containerPort: 4317
+              name: otlp-grpc
             - containerPort: 55679
+              name: zpages
           volumeMounts:
             - name: config-volume
               mountPath: /etc/otel

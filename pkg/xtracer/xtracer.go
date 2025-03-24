@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-func Init(cfg Config, appCfg xapp.Config) (*sdktrace.TracerProvider, error) {
+func Init(cfg *Config, appCfg *xapp.Config) (*sdktrace.TracerProvider, error) {
 	ctx := context.Background()
 	res, err := resource.New(ctx,
 		resource.WithAttributes(

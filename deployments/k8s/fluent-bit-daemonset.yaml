@@ -17,6 +17,8 @@ spec:
       containers:
         - name: fluent-bit
           image: fluent/fluent-bit:latest
+          command: [ "/fluent-bit/bin/fluent-bit" ]
+          args: [ "-c", "/fluent-bit/etc/fluent-bit.conf" ]
           volumeMounts:
             - name: varlog
               mountPath: /var/log
@@ -25,6 +27,8 @@ spec:
               readOnly: true
             - name: config-volume
               mountPath: /fluent-bit/etc/
+            - name: tail-db
+              mountPath: /tail-db/
       volumes:
         - name: varlog
           hostPath:
@@ -35,3 +39,9 @@ spec:
         - name: config-volume
           configMap:
             name: fluent-bit-config
+        - name: tail-db
+          emptyDir: { }
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0

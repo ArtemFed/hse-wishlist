@@ -73,15 +73,22 @@ HSE course project for Industrial Software Engineering
 
 > kubectl get pods --namespace=monitoring
 
+> kubectl get pods --all-namespaces
+
 > kubectl logs -f (pod name)
 
 > kubectl logs job/migrate
 
-### Чтобы сделать туннель для Postgres
+### Делаем туннели (хотя с таким количеством надо было уже в DNS запихать)
 > kubectl port-forward svc/postgres 5432:5432
 
-### Чтобы сделать туннель для Приложения
 > kubectl port-forward svc/tasks-svc 8082:8082
+
+> kubectl port-forward -n monitoring svc/prometheus 9090:9090
+
+> kubectl port-forward -n monitoring svc/grafana 3000:3000
+
+> kubectl port-forward -n monitoring svc/jaeger 16686:16686
 
 ## Работа с приложением:
 
@@ -125,22 +132,18 @@ http://localhost:8082/api/v1/swagger-ui/index.html#/Accounts/post_accounts
 
 ### Зачистка манифестов:
 
-#### Jobs:
 > kubectl delete -f deployments/k8s/migrate-up-job.yaml
 
 > kubectl delete -f deployments/k8s/migrate-down-job.yaml
 
 > kubectl delete -f deployments/k8s/migrate-configmap.yaml
 
-#### Persistent Volume:
 > kubectl delete -f deployments/k8s/postgres-pvc.yaml
 
-#### Postgres
 > kubectl delete -f deployments/k8s/postgres-deployment.yaml
 
 > kubectl delete -f deployments/k8s/postgres-service.yaml
 
-#### App
 > kubectl delete -f deployments/k8s/tasks-svc-configmap.yaml
 
 > kubectl delete -f deployments/k8s/tasks-svc-deployment.yaml
@@ -149,7 +152,6 @@ http://localhost:8082/api/v1/swagger-ui/index.html#/Accounts/post_accounts
 
 > kubectl delete -f deployments/k8s/tasks-svc-ingress.yaml
 
-#### Fluent-Bit
 > kubectl delete -f deployments/k8s/fluent-bit-configmap.yaml
 
 > kubectl delete -f deployments/k8s/fluent-bit-daemonset.yaml
